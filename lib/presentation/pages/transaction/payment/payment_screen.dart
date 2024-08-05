@@ -1,3 +1,4 @@
+import 'package:finalproject_flashora/core/common/widgets/common_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,11 +8,12 @@ import '../../../../core/common/common_text.dart';
 import '../../../../core/common/utils/currency_helper.dart';
 import '../../../../core/common/widgets/common_button.dart';
 import '../../../../dependency_injection.dart';
+import '../../../../domain/entities/payment_model.dart';
 import '../../../cubit/transaction/payment/payment_cubit.dart';
 
 class PaymentScreen extends StatelessWidget {
-  final double totalPayment;
-  const PaymentScreen({super.key, required this.totalPayment});
+  final PaymentModel paymentModel;
+  const PaymentScreen({super.key, required this.paymentModel});
 
   @override
   Widget build(BuildContext context) {
@@ -78,11 +80,7 @@ class PaymentScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: AppConstant.paddingNormal),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: .5,
-                color: CommonColor.borderColorDisable,
-              ),
+              const Line(),
               const SizedBox(height: AppConstant.paddingNormal),
               Row(
                 children: [
@@ -92,7 +90,9 @@ class PaymentScreen extends StatelessWidget {
                             .copyWith(color: CommonColor.textGrey)),
                   ),
                   const SizedBox(width: AppConstant.paddingNormal),
-                  Text(CurrencyHelper.formatCurrencyDouble(totalPayment),
+                  Text(
+                      CurrencyHelper.formatCurrencyDouble(
+                          paymentModel.totalPrice),
                       style: CommonText.fHeading5
                           .copyWith(color: CommonColor.primary)),
                 ],
@@ -108,11 +108,7 @@ class PaymentScreen extends StatelessWidget {
                   return Container();
                 },
               ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: .5,
-                color: CommonColor.borderColorDisable,
-              ),
+              const Line(),
               const SizedBox(height: AppConstant.paddingNormal),
               BlocBuilder<PaymentCubit, PaymentState>(
                   builder: (context, state) {
@@ -120,7 +116,10 @@ class PaymentScreen extends StatelessWidget {
                   return SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: CommonButtonFilled(
-                        onPressed: () {},
+                        onPressed: () => context
+                            .read<PaymentCubit>()
+                            .createTransaction(
+                                paymentModel, state.indexTabbar, context),
                         text: state.indexTabbar == 0
                             ? 'Pay Now'
                             : 'Confirm Payment'),

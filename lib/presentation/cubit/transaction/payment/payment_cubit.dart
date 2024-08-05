@@ -1,8 +1,13 @@
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
+import 'package:finalproject_flashora/presentation/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/common/utils/currency_helper.dart';
+import '../../../../domain/entities/payment_model.dart';
 import '../../../pages/transaction/payment/payment_method/cash_method.dart';
 import '../../../pages/transaction/payment/payment_method/qris_method.dart';
 import '../../../pages/transaction/payment/payment_method/transfer_method.dart';
@@ -40,6 +45,8 @@ class PaymentCubit extends Cubit<PaymentState> {
     PaymentMethod('LINK AJA', 'assets/images/linkaja.png', false),
     PaymentMethod('DANA', 'assets/images/dana.jpg', false),
   ];
+  String _selectedPaymentMethod = '';
+  String get selectedPaymentMethod => _selectedPaymentMethod;
 
   final formKey = GlobalKey<FormState>();
 
@@ -79,7 +86,28 @@ class PaymentCubit extends Cubit<PaymentState> {
             : e.copyWith(isSelected: false))
         .toList();
 
+    _selectedPaymentMethod = item.name;
     emit(PaymentLoaded(indexTabbar: 1, paymentMethod: newPaymentMethod));
+  }
+
+  void createTransaction(
+      PaymentModel payment, int indexTabbar, BuildContext context) {
+    String newSelectedPaymentMethod = indexTabbar == 0
+        ? 'Cash'
+        : indexTabbar == 1
+            ? _selectedPaymentMethod
+            : 'QRIS';
+
+    PaymentModel paymentModel = PaymentModel(
+      user: payment.user,
+      listProducts: payment.listProducts,
+      totalPrice: payment.totalPrice,
+      paymentMethod: newSelectedPaymentMethod,
+      transactionId:
+          "ORD${DateFormat('ddMMyyyy').format(DateTime.now())}${Random().nextInt(1000)}",
+    );
+
+    router.pushNamed(RoutesName.historyTransactionDetail, extra: paymentModel);
   }
 
   @override

@@ -1,5 +1,7 @@
+import 'package:finalproject_flashora/presentation/cubit/transaction/history/history_transaction_detail.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../domain/entities/payment_model.dart';
 import '../../domain/entities/product_model.dart';
 import '../pages/auth/login_screen.dart';
 import '../pages/auth/register_screen.dart';
@@ -23,6 +25,7 @@ abstract class RoutesName {
   static const profile = 'profile';
   static const checkout = 'checkout';
   static const payment = 'payment';
+  static const historyTransactionDetail = 'history-transaction-detail';
 }
 
 final GoRouter router = GoRouter(
@@ -81,8 +84,16 @@ final GoRouter router = GoRouter(
       path: '/${RoutesName.payment}',
       name: RoutesName.payment,
       builder: (context, state) {
-        double totalPayment = state.extra! as double;
-        return PaymentScreen(totalPayment: totalPayment);
+        PaymentModel totalPayment = state.extra! as PaymentModel;
+        return PaymentScreen(paymentModel: totalPayment);
+      },
+    ),
+    GoRoute(
+      path: '/${RoutesName.historyTransactionDetail}',
+      name: RoutesName.historyTransactionDetail,
+      builder: (context, state) {
+        PaymentModel paymentModel = state.extra! as PaymentModel;
+        return HistoryTransactionDetail(payment: paymentModel);
       },
     ),
   ],

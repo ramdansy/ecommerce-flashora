@@ -1,6 +1,6 @@
+import 'package:finalproject_flashora/domain/entities/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/app_constant.dart';
@@ -11,7 +11,7 @@ import '../../../../core/common/utils/currency_helper.dart';
 import '../../../../core/common/widgets/common_button.dart';
 import '../../../../domain/entities/product_model.dart';
 import '../../../cubit/profile/profile_cubit.dart';
-import '../../../routes/app_routes.dart';
+import '../../../cubit/transaction/checkout/checkout_cubit.dart';
 import 'widgets/single_list_product_checkout_widget.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -31,6 +31,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel? user;
+
     return Scaffold(
       backgroundColor: CommonColor.whiteBG,
       appBar: AppBar(
@@ -48,6 +50,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 BlocBuilder<ProfileCubit, ProfileState>(
                   builder: (context, state) {
                     if (state is ProfileLoaded) {
+                      user = state.user;
+
                       return Container(
                         padding:
                             const EdgeInsets.all(AppConstant.paddingNormal),
@@ -137,10 +141,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 const SizedBox(width: AppConstant.paddingSmall),
                 Expanded(
                     child: CommonButtonFilled(
-                        onPressed: () => context.pushNamed(RoutesName.payment,
-                            extra: widget.productCheckout
-                                .map((e) => e.product.price * e.quantity)
-                                .reduce((value, element) => value + element)),
+                        onPressed: () => context
+                            .read<CheckoutCubit>()
+                            .createOrder(user!, widget.productCheckout),
                         text: 'Payment Now')),
               ],
             ),

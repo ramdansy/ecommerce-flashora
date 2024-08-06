@@ -1,3 +1,5 @@
+import 'package:finalproject_flashora/core/common/enum/common_status_transaction.dart';
+import 'package:finalproject_flashora/presentation/widget/item_status_transaction_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -10,16 +12,17 @@ import '../../../../core/common/widgets/common_line.dart';
 import '../../../../domain/entities/payment_model.dart';
 import '../../../widget/single_label_value_widget.dart';
 
-class HistoryTransactionDetail extends StatefulWidget {
+class HistoryTransactionDetailScreen extends StatefulWidget {
   final PaymentModel payment;
-  const HistoryTransactionDetail({super.key, required this.payment});
+  const HistoryTransactionDetailScreen({super.key, required this.payment});
 
   @override
-  State<HistoryTransactionDetail> createState() =>
+  State<HistoryTransactionDetailScreen> createState() =>
       _HistoryTransactionDetailState();
 }
 
-class _HistoryTransactionDetailState extends State<HistoryTransactionDetail>
+class _HistoryTransactionDetailState
+    extends State<HistoryTransactionDetailScreen>
     with TickerProviderStateMixin {
   late double subtotal;
   late double totalPayment;
@@ -62,21 +65,10 @@ class _HistoryTransactionDetailState extends State<HistoryTransactionDetail>
           const SizedBox(height: AppConstant.paddingLarge),
           const Line(),
           const SizedBox(height: AppConstant.paddingNormal),
-          SingleLabelValueWidget(
+          const SingleLabelValueWidget(
             title: 'Status',
-            valueWidget: Container(
-              padding: const EdgeInsets.symmetric(
-                  vertical: AppConstant.paddingExtraSmall,
-                  horizontal: AppConstant.paddingNormal),
-              decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.circular(AppConstant.radiusExtraLarge),
-                  color: CommonColor.successColor.withOpacity(.1)),
-              child: Text('Success',
-                  style: CommonText.fBodyLarge.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: CommonColor.successColor)),
-            ),
+            valueWidget: ItemStatusTransactionWidget(
+                status: CommonStatusTransaction.success),
           ),
           SingleLabelValueWidget(
               title: 'Payment Method',

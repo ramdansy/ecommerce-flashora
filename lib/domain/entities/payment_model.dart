@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../core/common/enum/common_status_transaction.dart';
 import 'product_model.dart';
 import 'user_model.dart';
 
@@ -7,6 +10,8 @@ class PaymentModel {
   final double totalPrice;
   final String? transactionId;
   final String? paymentMethod;
+  final DateTime? createdAt;
+  final CommonStatusTransaction? status;
 
   PaymentModel({
     required this.user,
@@ -14,6 +19,8 @@ class PaymentModel {
     required this.totalPrice,
     this.paymentMethod,
     this.transactionId,
+    this.createdAt,
+    this.status,
   });
 
   PaymentModel copyWith({
@@ -22,6 +29,8 @@ class PaymentModel {
     List<ProductCheckout>? listProducts,
     double? totalPrice,
     String? transactionId,
+    DateTime? createdAt,
+    CommonStatusTransaction? status,
   }) {
     return PaymentModel(
       user: user ?? this.user,
@@ -29,6 +38,8 @@ class PaymentModel {
       listProducts: listProducts ?? this.listProducts,
       totalPrice: totalPrice ?? this.totalPrice,
       transactionId: transactionId ?? this.transactionId,
+      createdAt: createdAt ?? this.createdAt,
+      status: status ?? this.status,
     );
   }
 
@@ -39,6 +50,8 @@ class PaymentModel {
       'totalPrice': totalPrice,
       'paymentMethod': paymentMethod,
       'transactionId': transactionId,
+      'createdAt': createdAt ?? DateTime.now(),
+      'status': status ?? 'failed',
     };
   }
 
@@ -50,7 +63,22 @@ class PaymentModel {
       totalPrice: map['totalPrice']?.toDouble() ?? 0.0,
       paymentMethod: map['paymentMethod'],
       transactionId: map['transactionId'],
+      createdAt: (map['createdAt'] as Timestamp).toDate(),
+      status: _getStatusEnum(map['status']),
     );
+  }
+}
+
+CommonStatusTransaction _getStatusEnum(String? status) {
+  switch (status) {
+    case 'success':
+      return CommonStatusTransaction.success;
+    case 'failed':
+      return CommonStatusTransaction.failed;
+    case 'pending':
+      return CommonStatusTransaction.pending;
+    default:
+      return CommonStatusTransaction.failed; // or any other default value
   }
 }
 

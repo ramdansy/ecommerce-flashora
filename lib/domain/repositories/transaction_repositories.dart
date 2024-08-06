@@ -6,4 +6,5 @@ import '../entities/payment_model.dart';
 abstract class TransactionRepositories {
   Future<Either<CommonError, PaymentModel>> createTransaction(
       PaymentModel payment);
+  Future<Either<CommonError, List<PaymentModel>>> getAllTransaction();
 }

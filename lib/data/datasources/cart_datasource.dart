@@ -12,6 +12,7 @@ abstract class CartDatasource {
   Future<void> addProductToExistingCart(
       String cartId, ProductDetailCartModel productDetailCartModel);
   Future<void> deleteCartById(String cartId, String productId);
+  Future<void> deleteAllItemCart(String cartId);
 }
 
 class CartDatasourceImpl implements CartDatasource {
@@ -81,6 +82,17 @@ class CartDatasourceImpl implements CartDatasource {
       selectedProduct
           .removeWhere((element) => element['productId'] == productId);
       await cartRef.update({'productCart': selectedProduct});
+    }
+  }
+
+  @override
+  Future<void> deleteAllItemCart(String cartId) async {
+    final cartRef =
+        _firestore.collection(AppConstant.collectioncarts).doc(cartId);
+    final selectedCart = await cartRef.get();
+
+    if (selectedCart.exists) {
+      await cartRef.update({'productCart': []});
     }
   }
 }

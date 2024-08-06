@@ -31,6 +31,10 @@ class CommonIcon {
   static SvgPicture cartDefault = getImageFromAsset("cart-default.svg");
   static SvgPicture profileActive = getImageFromAsset("profile-active.svg");
   static SvgPicture profileDefault = getImageFromAsset("profile-default.svg");
+  static SvgPicture transactionActive =
+      getImageFromAsset("transaction-active.svg");
+  static SvgPicture transactionDefault =
+      getImageFromAsset("transaction-default.svg");
 
   //cart menu icon
   static SvgPicture delete = getImageFromAsset("delete.svg");

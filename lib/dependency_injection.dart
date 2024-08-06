@@ -1,3 +1,5 @@
+import 'package:finalproject_flashora/domain/usecases/transaction/get_all_transaction_usecase.dart';
+import 'package:finalproject_flashora/presentation/cubit/transaction/history/history_transaction_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
@@ -61,8 +63,9 @@ void setupLocator() {
       () => CartRepositoriesImpl(dataSource: getIt()));
   getIt.registerLazySingleton<UserRepositories>(
       () => UserRepositoriesImpl(dataSource: getIt()));
-  getIt.registerLazySingleton<TransactionRepositories>(
-      () => TransactionRepositoriesImpl(dataSource: getIt()));
+  getIt.registerLazySingleton<TransactionRepositories>(() =>
+      TransactionRepositoriesImpl(
+          dataSource: getIt(), cartDatasource: getIt()));
 
   // Use cases
   getIt.registerLazySingleton(() => LoginUsecase(getIt()));
@@ -76,6 +79,7 @@ void setupLocator() {
   getIt.registerLazySingleton(() => GetUserIdUsecase(getIt()));
   getIt.registerLazySingleton(() => CreateUserUsecase(getIt()));
   getIt.registerLazySingleton(() => CreateTransactionUsecase(getIt()));
+  getIt.registerLazySingleton(() => GetAllTransactionUsecase(getIt()));
 
   // Blocs
   getIt.registerFactory(() => SplashScreenCubit());
@@ -88,4 +92,5 @@ void setupLocator() {
   getIt.registerFactory(() => ProfileCubit(getIt()));
   getIt.registerFactory(() => CheckoutCubit());
   getIt.registerFactory(() => PaymentCubit(getIt()));
+  getIt.registerFactory(() => HistoryTransactionCubit(getIt()));
 }

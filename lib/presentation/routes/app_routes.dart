@@ -2,7 +2,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/payment_model.dart';
 import '../../domain/entities/product_model.dart';
-import '../cubit/transaction/history/history_transaction_detail.dart';
 import '../pages/auth/login_screen.dart';
 import '../pages/auth/register_screen.dart';
 import '../pages/cart/cart_screen.dart';
@@ -12,6 +11,8 @@ import '../pages/product/product_screen.dart';
 import '../pages/profile/profile_screen.dart';
 import '../pages/splash_screen.dart';
 import '../pages/transaction/checkout/checkout_screen.dart';
+import '../pages/transaction/history_transaction/history_transaction_detail_screen.dart';
+import '../pages/transaction/history_transaction/history_transaction_screen.dart';
 import '../pages/transaction/payment/payment_screen.dart';
 
 abstract class RoutesName {
@@ -25,6 +26,7 @@ abstract class RoutesName {
   static const profile = 'profile';
   static const checkout = 'checkout';
   static const payment = 'payment';
+  static const historyTransaction = 'history-transaction';
   static const historyTransactionDetail = 'history-transaction-detail';
 }
 
@@ -89,11 +91,18 @@ final GoRouter router = GoRouter(
       },
     ),
     GoRoute(
+      path: '/${RoutesName.historyTransaction}',
+      name: RoutesName.historyTransaction,
+      builder: (context, state) {
+        return const HistoryTransactionScreen();
+      },
+    ),
+    GoRoute(
       path: '/${RoutesName.historyTransactionDetail}',
       name: RoutesName.historyTransactionDetail,
       builder: (context, state) {
         PaymentModel paymentModel = state.extra! as PaymentModel;
-        return HistoryTransactionDetail(payment: paymentModel);
+        return HistoryTransactionDetailScreen(payment: paymentModel);
       },
     ),
   ],

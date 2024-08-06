@@ -77,22 +77,22 @@ class CommonButtonFilled extends StatelessWidget {
 }
 
 class CommonButtonOutlined extends StatelessWidget {
-  const CommonButtonOutlined({
-    super.key,
-    required this.onPressed,
-    this.text,
-    this.isEnable = true,
-    this.fontWeight = FontWeight.w600,
-    this.fontSize = AppConstant.paddingNormal,
-    this.paddingVertical = AppConstant.paddingMedium,
-    this.paddingHorizontal = AppConstant.paddingNormal,
-    this.color = CommonColor.primary,
-    this.fontColor = CommonColor.primary,
-    this.child,
-    this.borderRadius,
-    this.padding,
-    this.isLoading = false,
-  });
+  const CommonButtonOutlined(
+      {super.key,
+      required this.onPressed,
+      this.text,
+      this.isEnable = true,
+      this.fontWeight = FontWeight.w600,
+      this.fontSize = AppConstant.paddingNormal,
+      this.paddingVertical = AppConstant.paddingMedium,
+      this.paddingHorizontal = AppConstant.paddingNormal,
+      this.color = CommonColor.primary,
+      this.fontColor = CommonColor.primary,
+      this.child,
+      this.borderRadius,
+      this.padding,
+      this.isLoading = false,
+      this.iconLeft});
 
   final VoidCallback onPressed;
   final String? text;
@@ -107,6 +107,7 @@ class CommonButtonOutlined extends StatelessWidget {
   final BorderRadius? borderRadius;
   final EdgeInsets? padding;
   final bool isLoading;
+  final Widget? iconLeft;
 
   @override
   Widget build(BuildContext context) {
@@ -127,15 +128,29 @@ class CommonButtonOutlined extends StatelessWidget {
               height: AppConstant.iconNormal,
               child: CircularProgressIndicator(color: CommonColor.primary),
             )
-          : text != null
-              ? Text(
-                  text!,
+          : iconLeft != null
+              ? Row(
+                  children: [
+                    Container(child: iconLeft),
+                    Expanded(
+                      child: Text(
+                        text ?? "",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: fontColor,
+                            fontWeight: fontWeight,
+                            fontSize: fontSize),
+                      ),
+                    ),
+                  ],
+                )
+              : Text(
+                  text ?? "",
                   style: TextStyle(
                       color: fontColor,
                       fontWeight: fontWeight,
                       fontSize: fontSize),
-                )
-              : child,
+                ),
     );
   }
 }

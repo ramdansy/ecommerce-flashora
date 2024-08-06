@@ -1,10 +1,14 @@
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
-import 'package:finalproject_flashora/presentation/routes/app_routes.dart';
+import 'package:finalproject_flashora/core/common/common_color.dart';
+import '../../../../core/common/common_text.dart';
+import '../../../routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../core/common/utils/currency_helper.dart';
 import '../../../../domain/entities/payment_model.dart';
@@ -48,11 +52,12 @@ class PaymentCubit extends Cubit<PaymentState> {
   String _selectedPaymentMethod = '';
   String get selectedPaymentMethod => _selectedPaymentMethod;
 
-  final formKey = GlobalKey<FormState>();
+  int _indexTabbar = 0;
+  int get indexTabbar => _indexTabbar;
 
+  final formKey = GlobalKey<FormState>();
   final _paidAmountController = TextEditingController(text: 0.toString());
   TextEditingController get paidAmountController => _paidAmountController;
-
   final paidAmountFocus = FocusNode();
 
   List<Widget> listMethod = const [
@@ -76,6 +81,7 @@ class PaymentCubit extends Cubit<PaymentState> {
           _paymentType[i].copyWith(selected: i == index ? true : false);
     }
 
+    _indexTabbar = index;
     emit(PaymentLoaded(indexTabbar: index, paymentMethod: paymentMethod));
   }
 
@@ -87,11 +93,12 @@ class PaymentCubit extends Cubit<PaymentState> {
         .toList();
 
     _selectedPaymentMethod = item.name;
+    _indexTabbar = 1;
     emit(PaymentLoaded(indexTabbar: 1, paymentMethod: newPaymentMethod));
   }
 
-  void createTransaction(
-      PaymentModel payment, int indexTabbar, BuildContext context) {
+  void createTransaction(PaymentModel payment, BuildContext context,
+      AnimationController animationController) {
     String newSelectedPaymentMethod = indexTabbar == 0
         ? 'Cash'
         : indexTabbar == 1
@@ -107,7 +114,33 @@ class PaymentCubit extends Cubit<PaymentState> {
           "ORD${DateFormat('ddMMyyyy').format(DateTime.now())}${Random().nextInt(1000)}",
     );
 
-    router.pushNamed(RoutesName.historyTransactionDetail, extra: paymentModel);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: CommonColor.white,
+          title: Lottie.asset('assets/images/anim_success.json',
+              repeat: false,
+              width: 150,
+              height: 150,
+              controller: animationController,
+              onLoaded: (composition) => animationController
+                ..duration = composition.duration
+                ..forward().whenComplete(
+                  () => Future.delayed(
+                    const Duration(milliseconds: 500),
+                    () => context.pushNamed(RoutesName.historyTransactionDetail,
+                        extra: paymentModel),
+                  ),
+                )),
+          content: Text(
+            'Transaction has been created',
+            style: CommonText.fBodyLarge,
+            textAlign: TextAlign.center,
+          ),
+        );
+      },
+    );
   }
 
   @override

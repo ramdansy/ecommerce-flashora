@@ -1,11 +1,14 @@
-import 'package:finalproject_flashora/core/app_constant.dart';
-import 'package:finalproject_flashora/core/common/common_color.dart';
-import 'package:finalproject_flashora/core/common/common_text.dart';
-import 'package:finalproject_flashora/core/common/utils/currency_helper.dart';
-import 'package:finalproject_flashora/core/common/widgets/common_line.dart';
-import 'package:finalproject_flashora/domain/entities/payment_model.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+
+import '../../../../core/app_constant.dart';
+import '../../../../core/common/common_color.dart';
+import '../../../../core/common/common_text.dart';
+import '../../../../core/common/utils/currency_helper.dart';
+import '../../../../core/common/widgets/common_button.dart';
+import '../../../../core/common/widgets/common_line.dart';
+import '../../../../domain/entities/payment_model.dart';
+import '../../../widget/single_label_value_widget.dart';
 
 class HistoryTransactionDetail extends StatefulWidget {
   final PaymentModel payment;
@@ -59,7 +62,7 @@ class _HistoryTransactionDetailState extends State<HistoryTransactionDetail>
           const SizedBox(height: AppConstant.paddingLarge),
           const Line(),
           const SizedBox(height: AppConstant.paddingNormal),
-          singleTransactionItemWidget(
+          SingleLabelValueWidget(
             title: 'Status',
             valueWidget: Container(
               padding: const EdgeInsets.symmetric(
@@ -75,52 +78,121 @@ class _HistoryTransactionDetailState extends State<HistoryTransactionDetail>
                       color: CommonColor.successColor)),
             ),
           ),
-          singleTransactionItemWidget(
+          SingleLabelValueWidget(
               title: 'Payment Method',
               value: widget.payment.paymentMethod ?? ''),
-          singleTransactionItemWidget(
+          SingleLabelValueWidget(
               title: 'Transaction ID',
               value: widget.payment.transactionId ?? ''),
           const SizedBox(height: AppConstant.paddingNormal),
           const Line(),
           const SizedBox(height: AppConstant.paddingNormal),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: widget.payment.listProducts.length,
+            itemBuilder: (context, index) {
+              final item = widget.payment.listProducts[index];
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(AppConstant.radiusLarge),
+                      color: CommonColor.whiteBG,
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    constraints:
+                        const BoxConstraints(maxHeight: 100, maxWidth: 80),
+                    child: AspectRatio(
+                      aspectRatio: 1 / 1.25,
+                      child: Image.network(item.product.image.first,
+                          fit: BoxFit.contain),
+                    ),
+                  ),
+                  const SizedBox(width: AppConstant.paddingSmall),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.product.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: CommonText.fBodyLarge
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: AppConstant.paddingSmall),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Text(
+                              "${item.quantity} x ${CurrencyHelper.formatCurrencyDouble(item.product.price)}",
+                              style: CommonText.fBodyLarge,
+                            )),
+                            const SizedBox(width: AppConstant.paddingSmall),
+                            Text(
+                              CurrencyHelper.formatCurrencyDouble(
+                                  item.product.price * item.quantity),
+                              style: CommonText.fBodyLarge
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+            separatorBuilder: (context, index) => const SizedBox(
+              height: AppConstant.paddingNormal,
+            ),
+          ),
+          const SizedBox(height: AppConstant.paddingNormal),
           const Line(),
           const SizedBox(height: AppConstant.paddingNormal),
-          singleTransactionItemWidget(
+          SingleLabelValueWidget(
               title: 'Subtotal',
               value: CurrencyHelper.formatCurrencyDouble(subtotal)),
-          singleTransactionItemWidget(
+          SingleLabelValueWidget(
               title: 'Service Charge (5%)',
               value: CurrencyHelper.formatCurrencyDouble(serviceCharge)),
-          singleTransactionItemWidget(
+          SingleLabelValueWidget(
               title: 'Tax (5%)',
               value: CurrencyHelper.formatCurrencyDouble(tax)),
-          singleTransactionItemWidget(
+          SingleLabelValueWidget(
               title: 'Discount (5%)',
               value: CurrencyHelper.formatCurrencyDouble(discount)),
+          SingleLabelValueWidget(
+              title: 'Total Payment',
+              value: CurrencyHelper.formatCurrencyDouble(totalPayment)),
           const SizedBox(height: AppConstant.paddingNormal),
           const Line(),
-          const SizedBox(height: AppConstant.paddingNormal),
-          singleTransactionItemWidget(
-              title: 'Total',
-              value: CurrencyHelper.formatCurrencyDouble(totalPayment)),
         ],
       ),
-    );
-  }
-
-  Widget singleTransactionItemWidget(
-      {required String title, String? value, Widget? valueWidget}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: AppConstant.paddingSmall),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(title, style: CommonText.fBodyLarge),
-          ),
-          const SizedBox(width: AppConstant.paddingSmall),
-          valueWidget ?? Text(value ?? "", style: CommonText.fHeading5),
-        ],
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(AppConstant.paddingNormal),
+        child: Row(
+          children: [
+            Expanded(
+                child: CommonButtonOutlined(
+              onPressed: () {},
+              text: 'Share',
+              iconLeft:
+                  const Icon(Icons.share_outlined, color: CommonColor.primary),
+            )),
+            const SizedBox(width: AppConstant.paddingNormal),
+            Expanded(
+                child: CommonButtonFilled(
+              onPressed: () {},
+              text: 'Print',
+              iconLeft:
+                  const Icon(Icons.print_outlined, color: CommonColor.white),
+            )),
+          ],
+        ),
       ),
     );
   }

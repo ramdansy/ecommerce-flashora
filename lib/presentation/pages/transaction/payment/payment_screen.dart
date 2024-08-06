@@ -1,4 +1,3 @@
-import 'package:finalproject_flashora/core/common/widgets/common_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,13 +6,28 @@ import '../../../../core/common/common_color.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/common/utils/currency_helper.dart';
 import '../../../../core/common/widgets/common_button.dart';
+import '../../../../core/common/widgets/common_line.dart';
 import '../../../../dependency_injection.dart';
 import '../../../../domain/entities/payment_model.dart';
 import '../../../cubit/transaction/payment/payment_cubit.dart';
 
-class PaymentScreen extends StatelessWidget {
+class PaymentScreen extends StatefulWidget {
   final PaymentModel paymentModel;
   const PaymentScreen({super.key, required this.paymentModel});
+
+  @override
+  State<PaymentScreen> createState() => _PaymentScreenState();
+}
+
+class _PaymentScreenState extends State<PaymentScreen>
+    with TickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(vsync: this);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +106,7 @@ class PaymentScreen extends StatelessWidget {
                   const SizedBox(width: AppConstant.paddingNormal),
                   Text(
                       CurrencyHelper.formatCurrencyDouble(
-                          paymentModel.totalPrice),
+                          widget.paymentModel.totalPrice),
                       style: CommonText.fHeading5
                           .copyWith(color: CommonColor.primary)),
                 ],
@@ -116,13 +130,14 @@ class PaymentScreen extends StatelessWidget {
                   return SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: CommonButtonFilled(
-                        onPressed: () => context
-                            .read<PaymentCubit>()
-                            .createTransaction(
-                                paymentModel, state.indexTabbar, context),
-                        text: state.indexTabbar == 0
-                            ? 'Pay Now'
-                            : 'Confirm Payment'),
+                      onPressed: () => context
+                          .read<PaymentCubit>()
+                          .createTransaction(widget.paymentModel, context,
+                              _animationController),
+                      text: state.indexTabbar == 0
+                          ? 'Pay Now'
+                          : 'Confirm Payment',
+                    ),
                   );
                 }
                 return Container();

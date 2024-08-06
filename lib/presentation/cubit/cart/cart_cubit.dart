@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/app_preferences.dart';
 import '../../../domain/entities/cart_model.dart';
+import '../../../domain/entities/payment_model.dart';
 import '../../../domain/usecases/cart/delete_cart_usecase.dart';
 import '../../../domain/usecases/cart/get_cart_by_user_id_usecase.dart';
 import '../../../domain/usecases/cart/update_quantity_usecase.dart';
 import '../../../domain/usecases/product/get_product_by_id_usecase.dart';
-import '../../pages/transaction/checkout/checkout_screen.dart';
 import '../../routes/app_routes.dart';
 
 part 'cart_state.dart';

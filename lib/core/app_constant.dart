@@ -25,7 +25,7 @@ class AppConstant {
   static const String collectionProducts = 'products';
   static const String collectioncarts = 'carts';
   static const String collectionImages = 'images';
-  static const String collectionOrders = 'orders';
+  static const String collectionTransaction = 'transaction';
 
   //text
   static const textErrorEmpty = '@fieldName required';

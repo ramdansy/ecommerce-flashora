@@ -4,14 +4,17 @@ import 'package:http/http.dart' as http;
 import 'data/datasources/auth_datasource.dart';
 import 'data/datasources/cart_datasource.dart';
 import 'data/datasources/product_datasource.dart';
+import 'data/datasources/transaction_datasource.dart';
 import 'data/datasources/user_datasource.dart';
 import 'data/repositories/auth_repositories_impl.dart';
 import 'data/repositories/cart_repositories_impl.dart';
 import 'data/repositories/product_repositories_impl.dart';
+import 'data/repositories/transaction_repositories_impl.dart';
 import 'data/repositories/user_repositories_impl.dart';
 import 'domain/repositories/auth_repositories.dart';
 import 'domain/repositories/cart_repositories.dart';
 import 'domain/repositories/product_repositories.dart';
+import 'domain/repositories/transaction_repositories.dart';
 import 'domain/repositories/user_repositories.dart';
 import 'domain/usecases/auth/login_usecase.dart';
 import 'domain/usecases/auth/register_usecase.dart';
@@ -21,6 +24,7 @@ import 'domain/usecases/cart/get_cart_by_user_id_usecase.dart';
 import 'domain/usecases/cart/update_quantity_usecase.dart';
 import 'domain/usecases/product/get_all_products_usecase.dart';
 import 'domain/usecases/product/get_product_by_id_usecase.dart';
+import 'domain/usecases/transaction/create_transaction_usecase.dart';
 import 'domain/usecases/users/create_user_usecase.dart';
 import 'domain/usecases/users/get_user_by_id_usecase.dart';
 import 'presentation/cubit/auth/login/login_cubit.dart';
@@ -44,8 +48,9 @@ void setupLocator() {
       () => ProductDatasourceImpl(client: getIt()));
   getIt.registerLazySingleton<CartDatasource>(
       () => CartDatasourceImpl(client: getIt()));
-  getIt.registerLazySingleton<UserDatasource>(
-      () => UserDatasourceImpl(client: getIt()));
+  getIt.registerLazySingleton<UserDatasource>(() => UserDatasourceImpl());
+  getIt.registerLazySingleton<TransactionDatasource>(
+      () => TransactionDatasourceImpl());
 
   // Repositories
   getIt.registerLazySingleton<AuthRepositories>(
@@ -56,6 +61,8 @@ void setupLocator() {
       () => CartRepositoriesImpl(dataSource: getIt()));
   getIt.registerLazySingleton<UserRepositories>(
       () => UserRepositoriesImpl(dataSource: getIt()));
+  getIt.registerLazySingleton<TransactionRepositories>(
+      () => TransactionRepositoriesImpl(dataSource: getIt()));
 
   // Use cases
   getIt.registerLazySingleton(() => LoginUsecase(getIt()));
@@ -68,6 +75,7 @@ void setupLocator() {
   getIt.registerLazySingleton(() => DeleteCartUsecase(getIt()));
   getIt.registerLazySingleton(() => GetUserIdUsecase(getIt()));
   getIt.registerLazySingleton(() => CreateUserUsecase(getIt()));
+  getIt.registerLazySingleton(() => CreateTransactionUsecase(getIt()));
 
   // Blocs
   getIt.registerFactory(() => SplashScreenCubit());
@@ -79,5 +87,5 @@ void setupLocator() {
   getIt.registerFactory(() => ProductDetailCubit(getIt()));
   getIt.registerFactory(() => ProfileCubit(getIt()));
   getIt.registerFactory(() => CheckoutCubit());
-  getIt.registerFactory(() => PaymentCubit());
+  getIt.registerFactory(() => PaymentCubit(getIt()));
 }

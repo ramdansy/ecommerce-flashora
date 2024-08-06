@@ -9,10 +9,10 @@ import '../../../core/common/utils/currency_helper.dart';
 import '../../../core/common/widgets/common_button.dart';
 import '../../../core/common/widgets/common_snacbar.dart';
 import '../../../domain/entities/cart_model.dart';
+import '../../../domain/entities/payment_model.dart';
 import '../../../domain/entities/product_model.dart';
 import '../../cubit/product_cubit/product_detail/product_detail_cubit.dart';
 import '../../routes/app_routes.dart';
-import '../transaction/checkout/checkout_screen.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final ProductModel product;

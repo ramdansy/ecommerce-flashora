@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../domain/entities/payment_model.dart';
 import '../../../../domain/entities/user_model.dart';
-import '../../../pages/transaction/checkout/checkout_screen.dart';
 import '../../../routes/app_routes.dart';
 
 part 'checkout_state.dart';

@@ -132,7 +132,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                     child: CommonButtonFilled(
                       onPressed: () => context
                           .read<PaymentCubit>()
-                          .createTransaction(widget.paymentModel, context,
+                          .validateTransaction(widget.paymentModel, context,
                               _animationController),
                       text: state.indexTabbar == 0
                           ? 'Pay Now'

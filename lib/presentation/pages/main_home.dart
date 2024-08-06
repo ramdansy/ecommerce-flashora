@@ -1,7 +1,7 @@
-import 'package:finalproject_flashora/core/app_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/app_constant.dart';
 import '../../core/common/common_color.dart';
 import '../../core/common/common_icon.dart';
 import '../cubit/bottom_nav/bottom_nav_cubit.dart';

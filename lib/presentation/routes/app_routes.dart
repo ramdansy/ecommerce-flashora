@@ -1,8 +1,8 @@
-import 'package:finalproject_flashora/presentation/cubit/transaction/history/history_transaction_detail.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/payment_model.dart';
 import '../../domain/entities/product_model.dart';
+import '../cubit/transaction/history/history_transaction_detail.dart';
 import '../pages/auth/login_screen.dart';
 import '../pages/auth/register_screen.dart';
 import '../pages/cart/cart_screen.dart';

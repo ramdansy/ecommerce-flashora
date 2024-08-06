@@ -1,26 +1,27 @@
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
-import 'package:finalproject_flashora/core/common/common_color.dart';
-import '../../../../core/common/common_text.dart';
-import '../../../routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../../core/common/common_color.dart';
+import '../../../../core/common/common_text.dart';
 import '../../../../core/common/utils/currency_helper.dart';
 import '../../../../domain/entities/payment_model.dart';
+import '../../../../domain/usecases/transaction/create_transaction_usecase.dart';
 import '../../../pages/transaction/payment/payment_method/cash_method.dart';
 import '../../../pages/transaction/payment/payment_method/qris_method.dart';
 import '../../../pages/transaction/payment/payment_method/transfer_method.dart';
+import '../../../routes/app_routes.dart';
 import '../../product_cubit/product/product_cubit.dart';
 
 part 'payment_state.dart';
 
 class PaymentCubit extends Cubit<PaymentState> {
-  PaymentCubit() : super(const PaymentLoaded());
+  final CreateTransactionUsecase createTransactionUsecase;
+  PaymentCubit(this.createTransactionUsecase) : super(const PaymentLoaded());
 
   final List<Category> _paymentType = [
     Category(name: 'Cash', selected: true),
@@ -97,8 +98,8 @@ class PaymentCubit extends Cubit<PaymentState> {
     emit(PaymentLoaded(indexTabbar: 1, paymentMethod: newPaymentMethod));
   }
 
-  void createTransaction(PaymentModel payment, BuildContext context,
-      AnimationController animationController) {
+  void validateTransaction(PaymentModel payment, BuildContext context,
+      AnimationController animationController) async {
     String newSelectedPaymentMethod = indexTabbar == 0
         ? 'Cash'
         : indexTabbar == 1
@@ -114,32 +115,33 @@ class PaymentCubit extends Cubit<PaymentState> {
           "ORD${DateFormat('ddMMyyyy').format(DateTime.now())}${Random().nextInt(1000)}",
     );
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: CommonColor.white,
-          title: Lottie.asset('assets/images/anim_success.json',
-              repeat: false,
-              width: 150,
-              height: 150,
-              controller: animationController,
-              onLoaded: (composition) => animationController
-                ..duration = composition.duration
-                ..forward().whenComplete(
-                  () => Future.delayed(
-                    const Duration(milliseconds: 500),
-                    () => context.pushNamed(RoutesName.historyTransactionDetail,
-                        extra: paymentModel),
-                  ),
-                )),
-          content: Text(
-            'Transaction has been created',
-            style: CommonText.fBodyLarge,
-            textAlign: TextAlign.center,
-          ),
-        );
-      },
+    final resCreateTransaction =
+        await createTransactionUsecase.execute(paymentModel);
+    resCreateTransaction.fold(
+      (l) => null,
+      (r) => showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: CommonColor.white,
+            title: Lottie.asset('assets/images/anim_success.json',
+                repeat: false,
+                width: 150,
+                height: 150,
+                controller: animationController,
+                onLoaded: (composition) => animationController
+                  ..duration = composition.duration
+                  ..forward().whenComplete(() => router.pushNamed(
+                      RoutesName.historyTransactionDetail,
+                      extra: payment))),
+            content: Text(
+              'Transaction has been created',
+              style: CommonText.fBodyLarge,
+              textAlign: TextAlign.center,
+            ),
+          );
+        },
+      ),
     );
   }
 

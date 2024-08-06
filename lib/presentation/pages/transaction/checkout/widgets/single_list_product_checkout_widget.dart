@@ -4,9 +4,9 @@ import '../../../../../core/app_constant.dart';
 import '../../../../../core/common/common_color.dart';
 import '../../../../../core/common/common_text.dart';
 import '../../../../../core/common/utils/currency_helper.dart';
+import '../../../../../domain/entities/payment_model.dart';
 import '../../../../../domain/entities/product_model.dart';
 import '../../../../../domain/entities/user_model.dart';
-import '../checkout_screen.dart';
 
 class SingleListProductCheckoutWidget extends StatelessWidget {
   final ProductCheckout productCheckout;

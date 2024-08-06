@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../../core/app_constant.dart';
 import '../../domain/entities/user_model.dart';
@@ -10,10 +9,6 @@ abstract class UserDatasource {
 }
 
 class UserDatasourceImpl implements UserDatasource {
-  final http.Client client;
-
-  UserDatasourceImpl({required this.client});
-
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override

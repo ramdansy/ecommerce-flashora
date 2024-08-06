@@ -1,4 +1,3 @@
-import 'package:finalproject_flashora/domain/entities/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -9,7 +8,8 @@ import '../../../../core/common/common_shimmer.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/common/utils/currency_helper.dart';
 import '../../../../core/common/widgets/common_button.dart';
-import '../../../../domain/entities/product_model.dart';
+import '../../../../domain/entities/payment_model.dart';
+import '../../../../domain/entities/user_model.dart';
 import '../../../cubit/profile/profile_cubit.dart';
 import '../../../cubit/transaction/checkout/checkout_cubit.dart';
 import 'widgets/single_list_product_checkout_widget.dart';
@@ -152,11 +152,4 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
     );
   }
-}
-
-class ProductCheckout {
-  final ProductModel product;
-  final int quantity;
-
-  ProductCheckout({required this.product, required this.quantity});
 }

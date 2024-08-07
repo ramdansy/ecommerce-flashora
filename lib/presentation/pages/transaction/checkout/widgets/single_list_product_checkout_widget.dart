@@ -31,7 +31,7 @@ class SingleListProductCheckoutWidget extends StatelessWidget {
             aspectRatio: 1 / 1.25,
             child: Image.network(
               productCheckout.product.image.first,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
             ),
           ),
         ),

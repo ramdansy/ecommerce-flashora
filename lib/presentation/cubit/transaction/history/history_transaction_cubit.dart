@@ -17,11 +17,13 @@ class HistoryTransactionCubit extends Cubit<HistoryTransactionState> {
   void getHistoryTransaction() async {
     emit(HistoryLoading());
 
+    _listPayment.clear();
+
     final response = await getAllTransactionUsecase.execute();
     response.fold(
       (left) => emit(HistoryError(left.message.toString())),
       (right) {
-        _listPayment = right;
+        _listPayment.addAll(right);
         emit(HistoryLoaded(_listPayment));
       },
     );

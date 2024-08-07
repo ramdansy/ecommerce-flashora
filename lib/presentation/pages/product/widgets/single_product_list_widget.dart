@@ -24,7 +24,7 @@ class SingleProductListWidget extends StatelessWidget {
           constraints: const BoxConstraints(maxHeight: 100, maxWidth: 80),
           child: AspectRatio(
             aspectRatio: 1 / 1.25,
-            child: Image.network(product.image.first, fit: BoxFit.cover),
+            child: Image.network(product.image.first, fit: BoxFit.contain),
           ),
         ),
         const SizedBox(width: 12),

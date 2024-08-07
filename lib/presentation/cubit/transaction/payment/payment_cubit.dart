@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
+import 'package:finalproject_flashora/core/common/utils/notification_helper.dart';
+import 'package:finalproject_flashora/presentation/cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -119,29 +121,43 @@ class PaymentCubit extends Cubit<PaymentState> {
         await createTransactionUsecase.execute(paymentModel);
     resCreateTransaction.fold(
       (l) => null,
-      (r) => showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: CommonColor.white,
-            title: Lottie.asset('assets/images/anim_success.json',
-                repeat: false,
-                width: 150,
-                height: 150,
-                controller: animationController,
-                onLoaded: (composition) => animationController
-                  ..duration = composition.duration
-                  ..forward().whenComplete(() => router.pushNamed(
-                      RoutesName.historyTransactionDetail,
-                      extra: payment))),
-            content: Text(
-              'Transaction has been created',
-              style: CommonText.fBodyLarge,
-              textAlign: TextAlign.center,
-            ),
-          );
-        },
-      ),
+      (r) {
+        NotificationHelper.flutterLocalNotificationsPlugin.show(
+          Random().nextInt(999),
+          'Transaction ${paymentModel.transactionId} has been created',
+          'Transaction can be found in History Transaction',
+          NotificationHelper.notificationDetails,
+        );
+
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              backgroundColor: CommonColor.white,
+              title: Lottie.asset('assets/images/anim_success.json',
+                  repeat: false,
+                  width: 150,
+                  height: 150,
+                  controller: animationController,
+                  onLoaded: (composition) => animationController
+                    ..duration = composition.duration
+                    ..forward().whenComplete(() {
+                      router.pop();
+                      router.pop();
+                      router.pop();
+                      context.read<BottomNavCubit>().navigateTo(index: 2);
+                      router.pushNamed(RoutesName.historyTransactionDetail,
+                          extra: paymentModel);
+                    })),
+              content: Text(
+                'Transaction has been created',
+                style: CommonText.fBodyLarge,
+                textAlign: TextAlign.center,
+              ),
+            );
+          },
+        );
+      },
     );
   }
 

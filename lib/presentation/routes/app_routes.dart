@@ -66,44 +66,49 @@ final GoRouter router = GoRouter(
               }),
         ]),
     GoRoute(
-      path: '/${RoutesName.cart}',
-      name: RoutesName.cart,
-      builder: (context, state) => const CartScreen(),
-    ),
-    GoRoute(
       path: '/${RoutesName.profile}',
       name: RoutesName.profile,
       builder: (context, state) => const ProfileScreen(),
     ),
     GoRoute(
-        path: '/${RoutesName.checkout}',
-        name: RoutesName.checkout,
+        path: '/${RoutesName.cart}',
+        name: RoutesName.cart,
+        builder: (context, state) => const CartScreen(),
+        routes: <GoRoute>[
+          GoRoute(
+              path: RoutesName.checkout,
+              name: RoutesName.checkout,
+              builder: (context, state) {
+                List<ProductCheckout> arg =
+                    state.extra! as List<ProductCheckout>;
+                return CheckoutScreen(productCheckout: arg);
+              },
+              routes: <GoRoute>[
+                GoRoute(
+                  path: RoutesName.payment,
+                  name: RoutesName.payment,
+                  builder: (context, state) {
+                    PaymentModel totalPayment = state.extra! as PaymentModel;
+                    return PaymentScreen(paymentModel: totalPayment);
+                  },
+                ),
+              ]),
+        ]),
+    GoRoute(
+        path: '/${RoutesName.historyTransaction}',
+        name: RoutesName.historyTransaction,
         builder: (context, state) {
-          List<ProductCheckout> arg = state.extra! as List<ProductCheckout>;
-          return CheckoutScreen(productCheckout: arg);
-        }),
-    GoRoute(
-      path: '/${RoutesName.payment}',
-      name: RoutesName.payment,
-      builder: (context, state) {
-        PaymentModel totalPayment = state.extra! as PaymentModel;
-        return PaymentScreen(paymentModel: totalPayment);
-      },
-    ),
-    GoRoute(
-      path: '/${RoutesName.historyTransaction}',
-      name: RoutesName.historyTransaction,
-      builder: (context, state) {
-        return const HistoryTransactionScreen();
-      },
-    ),
-    GoRoute(
-      path: '/${RoutesName.historyTransactionDetail}',
-      name: RoutesName.historyTransactionDetail,
-      builder: (context, state) {
-        PaymentModel paymentModel = state.extra! as PaymentModel;
-        return HistoryTransactionDetailScreen(payment: paymentModel);
-      },
-    ),
+          return const HistoryTransactionScreen();
+        },
+        routes: <GoRoute>[
+          GoRoute(
+            path: RoutesName.historyTransactionDetail,
+            name: RoutesName.historyTransactionDetail,
+            builder: (context, state) {
+              PaymentModel paymentModel = state.extra! as PaymentModel;
+              return HistoryTransactionDetailScreen(payment: paymentModel);
+            },
+          ),
+        ]),
   ],
 );

@@ -1,5 +1,7 @@
+import 'package:finalproject_flashora/presentation/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/app_constant.dart';
@@ -107,94 +109,99 @@ class SingleHistoryTransactionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppConstant.radiusExtraLarge),
-        color: CommonColor.white,
-        border: Border.all(color: CommonColor.borderColorDisable),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(AppConstant.paddingMedium),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(AppConstant.radiusLarge),
-                    color: CommonColor.whiteBG,
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  constraints:
-                      const BoxConstraints(maxHeight: 100, maxWidth: 80),
-                  child: AspectRatio(
-                    aspectRatio: 1 / 1.25,
-                    child: Image.network(
-                        item.listProducts.first.product.image.first,
-                        fit: BoxFit.cover),
-                  ),
-                ),
-                const SizedBox(width: AppConstant.paddingSmall),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.listProducts.first.product.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: CommonText.fBodyLarge
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      Text(item.listProducts.first.product.category,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: CommonText.fBodySmall
-                              .copyWith(color: CommonColor.textGrey)),
-                      const SizedBox(height: AppConstant.paddingSmall),
-                      Text(
-                        CurrencyHelper.formatCurrencyDouble(
-                            item.listProducts.first.product.price),
-                        style: CommonText.fHeading5
-                            .copyWith(color: CommonColor.primary),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-          if (item.listProducts.length > 1)
+    return InkWell(
+      onTap: () =>
+          context.pushNamed(RoutesName.historyTransactionDetail, extra: item),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(AppConstant.radiusExtraLarge),
+          color: CommonColor.white,
+          border: Border.all(color: CommonColor.borderColorDisable),
+        ),
+        margin: const EdgeInsets.only(bottom: AppConstant.paddingNormal),
+        child: Column(
+          children: [
             Padding(
-              padding: const EdgeInsets.all(AppConstant.paddingSmall),
-              child: Text(
-                '+${item.listProducts.length - 1} Products',
-                style:
-                    CommonText.fBodyLarge.copyWith(color: CommonColor.textGrey),
+              padding: const EdgeInsets.all(AppConstant.paddingMedium),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(AppConstant.radiusLarge),
+                      color: CommonColor.whiteBG,
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    constraints:
+                        const BoxConstraints(maxHeight: 100, maxWidth: 80),
+                    child: AspectRatio(
+                      aspectRatio: 1 / 1.25,
+                      child: Image.network(
+                          item.listProducts.first.product.image.first,
+                          fit: BoxFit.cover),
+                    ),
+                  ),
+                  const SizedBox(width: AppConstant.paddingSmall),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.listProducts.first.product.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: CommonText.fBodyLarge
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        Text(item.listProducts.first.product.category,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: CommonText.fBodySmall
+                                .copyWith(color: CommonColor.textGrey)),
+                        const SizedBox(height: AppConstant.paddingSmall),
+                        Text(
+                          CurrencyHelper.formatCurrencyDouble(
+                              item.listProducts.first.product.price),
+                          style: CommonText.fHeading5
+                              .copyWith(color: CommonColor.primary),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
-          Container(
-            padding: const EdgeInsets.all(AppConstant.paddingMedium),
-            decoration: const BoxDecoration(
-              border: Border(
-                  top: BorderSide(color: CommonColor.borderColorDisable)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                    "${item.transactionId} - ${DateFormat.yMMMd().format(item.createdAt!)}",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: CommonText.fBodySmall
-                        .copyWith(color: CommonColor.textGrey)),
-                ItemStatusTransactionWidget(status: item.status!),
-              ],
-            ),
-          )
-        ],
+            if (item.listProducts.length > 1)
+              Padding(
+                padding: const EdgeInsets.all(AppConstant.paddingSmall),
+                child: Text(
+                  '+${item.listProducts.length - 1} Products',
+                  style: CommonText.fBodyLarge
+                      .copyWith(color: CommonColor.textGrey),
+                ),
+              ),
+            Container(
+              padding: const EdgeInsets.all(AppConstant.paddingMedium),
+              decoration: const BoxDecoration(
+                border: Border(
+                    top: BorderSide(color: CommonColor.borderColorDisable)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                      "${item.transactionId} - ${DateFormat.yMMMd().format(item.createdAt!)}",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: CommonText.fBodySmall
+                          .copyWith(color: CommonColor.textGrey)),
+                  ItemStatusTransactionWidget(status: item.status!),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,15 +1,16 @@
-import 'package:finalproject_flashora/core/common/enum/common_status_transaction.dart';
-import 'package:finalproject_flashora/presentation/widget/item_status_transaction_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../../core/app_constant.dart';
 import '../../../../core/common/common_color.dart';
 import '../../../../core/common/common_text.dart';
+import '../../../../core/common/enum/common_status_transaction.dart';
 import '../../../../core/common/utils/currency_helper.dart';
 import '../../../../core/common/widgets/common_button.dart';
 import '../../../../core/common/widgets/common_line.dart';
 import '../../../../domain/entities/payment_model.dart';
+import '../../../routes/app_routes.dart';
+import '../../../widget/item_status_transaction_widget.dart';
 import '../../../widget/single_label_value_widget.dart';
 
 class HistoryTransactionDetailScreen extends StatefulWidget {
@@ -51,24 +52,29 @@ class _HistoryTransactionDetailState
         backgroundColor: CommonColor.white,
         title: Text('Transaction Detail', style: CommonText.fHeading4),
         scrolledUnderElevation: 0.0,
+        leading: IconButton(
+            onPressed: () => router.pop(), icon: const Icon(Icons.arrow_back)),
       ),
       body: ListView(
         padding: const EdgeInsets.all(AppConstant.paddingNormal),
         children: [
-          Lottie.asset(
-            'assets/images/anim_success.json',
-            repeat: false,
-            width: 150,
-            height: 150,
-            onLoaded: (composition) {},
-          ),
-          const SizedBox(height: AppConstant.paddingLarge),
-          const Line(),
-          const SizedBox(height: AppConstant.paddingNormal),
-          const SingleLabelValueWidget(
+          if (widget.payment.status == CommonStatusTransaction.success) ...[
+            Lottie.asset(
+              'assets/images/anim_success.json',
+              repeat: false,
+              width: 150,
+              height: 150,
+              onLoaded: (composition) {},
+            ),
+            const SizedBox(height: AppConstant.paddingLarge),
+            const Line(),
+            const SizedBox(height: AppConstant.paddingNormal),
+          ],
+          SingleLabelValueWidget(
             title: 'Status',
             valueWidget: ItemStatusTransactionWidget(
-                status: CommonStatusTransaction.success),
+                status:
+                    widget.payment.status ?? CommonStatusTransaction.failed),
           ),
           SingleLabelValueWidget(
               title: 'Payment Method',
@@ -162,29 +168,32 @@ class _HistoryTransactionDetailState
               value: CurrencyHelper.formatCurrencyDouble(totalPayment)),
           const SizedBox(height: AppConstant.paddingNormal),
           const Line(),
-        ],
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(AppConstant.paddingNormal),
-        child: Row(
-          children: [
-            Expanded(
-                child: CommonButtonOutlined(
-              onPressed: () {},
-              text: 'Share',
-              iconLeft:
-                  const Icon(Icons.share_outlined, color: CommonColor.primary),
-            )),
-            const SizedBox(width: AppConstant.paddingNormal),
-            Expanded(
-                child: CommonButtonFilled(
-              onPressed: () {},
-              text: 'Print',
-              iconLeft:
-                  const Icon(Icons.print_outlined, color: CommonColor.white),
-            )),
+          const SizedBox(height: AppConstant.paddingNormal),
+          if (widget.payment.status == CommonStatusTransaction.success) ...[
+            Row(
+              children: [
+                Expanded(
+                  child: CommonButtonOutlined(
+                    onPressed: () {},
+                    text: 'Share',
+                    iconLeft: const Icon(Icons.share_outlined,
+                        color: CommonColor.primary),
+                  ),
+                ),
+                const SizedBox(width: AppConstant.paddingNormal),
+                Expanded(
+                  child: CommonButtonFilled(
+                    onPressed: () {},
+                    text: 'Print',
+                    iconLeft: const Icon(Icons.print_outlined,
+                        color: CommonColor.white),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppConstant.paddingNormal),
           ],
-        ),
+        ],
       ),
     );
   }

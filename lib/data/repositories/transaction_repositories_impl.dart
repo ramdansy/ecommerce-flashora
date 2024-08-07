@@ -43,8 +43,9 @@ class TransactionRepositoriesImpl implements TransactionRepositories {
       final response = await dataSource.getAllTransaction();
 
       if (response.docs.isNotEmpty) {
-        return Right(
-            response.docs.map((e) => PaymentModel.fromMap(e.data())).toList());
+        final jsonResponse =
+            response.docs.map((e) => PaymentModel.fromMap(e.data())).toList();
+        return Right(List<PaymentModel>.from(jsonResponse));
       } else {
         return const Right([]);
       }

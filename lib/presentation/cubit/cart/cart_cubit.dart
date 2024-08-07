@@ -7,17 +7,15 @@ import '../../../domain/entities/payment_model.dart';
 import '../../../domain/usecases/cart/delete_cart_usecase.dart';
 import '../../../domain/usecases/cart/get_cart_by_user_id_usecase.dart';
 import '../../../domain/usecases/cart/update_quantity_usecase.dart';
-import '../../../domain/usecases/product/get_product_by_id_usecase.dart';
 import '../../routes/app_routes.dart';
 
 part 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
   final GetCartByUserIdUsecase getCartByUserId;
-  final GetProductByIdUsecase getProductById;
   final UpdateQuantityUsecase updateQuantity;
   final DeleteCartUsecase deleteCart;
-  CartCubit(this.getCartByUserId, this.getProductById, this.updateQuantity,
+  CartCubit(this.getCartByUserId, this.updateQuantity,
       this.deleteCart)
       : super(CartInitial());
 

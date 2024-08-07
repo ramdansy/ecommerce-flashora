@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../../core/app_constant.dart';
+import '../../domain/entities/product_model.dart';
 
 abstract class ProductDatasource {
   Future<QuerySnapshot<Map<String, dynamic>>> getAllProducts();
-  Future<http.Response> getProductById(int productId);
+  Future<DocumentReference<Map<String, dynamic>>> addProduct(
+      ProductModel product);
+  Future<void> deleteProduct(String productId);
+  Future<void> updateStock(String productId, int newStock);
+  Future<void> updatePrice(String productId, double newPrice);
 }
 
 class ProductDatasourceImpl implements ProductDatasource {
-  final http.Client client;
-  ProductDatasourceImpl({required this.client});
-
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
@@ -20,8 +21,34 @@ class ProductDatasourceImpl implements ProductDatasource {
   }
 
   @override
-  Future<http.Response> getProductById(int productId) async {
-    return await http
-        .get(Uri.parse('${AppConstant.baseUrl}/products/$productId'));
+  Future<DocumentReference<Map<String, dynamic>>> addProduct(
+      ProductModel product) async {
+    return await _firestore
+        .collection(AppConstant.collectionProducts)
+        .add(product.toMap());
+  }
+
+  @override
+  Future<void> deleteProduct(String productId) async {
+    return await _firestore
+        .collection(AppConstant.collectionProducts)
+        .doc(productId)
+        .delete();
+  }
+
+  @override
+  Future<void> updatePrice(String productId, double newPrice) async {
+    return await _firestore
+        .collection(AppConstant.collectionProducts)
+        .doc(productId)
+        .update({'price': newPrice});
+  }
+
+  @override
+  Future<void> updateStock(String productId, int newStock) async {
+    return await _firestore
+        .collection(AppConstant.collectionProducts)
+        .doc(productId)
+        .update({'stock': newStock});
   }
 }

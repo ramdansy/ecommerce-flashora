@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/common/utils/notification_helper.dart';
@@ -11,11 +12,16 @@ part 'product_state.dart';
 
 class ProductCubit extends Cubit<ProductState> {
   final GetAllProductsUsecase getAllProducts;
+
   ProductCubit(this.getAllProducts) : super(ProductInitial());
 
-  List<ProductModel> _listProduct = [];
+  final _stockController = TextEditingController();
+  TextEditingController get stockController => _stockController;
+  final stockFocusNode = FocusNode();
 
-  final List<Category> _categories = [
+  List<ProductModel> listProduct = [];
+
+  final List<Category> listCategories = [
     Category(name: 'All', selected: true),
     Category(name: 'Shirt', selected: false),
     Category(name: 'Shoes', selected: false),
@@ -25,7 +31,6 @@ class ProductCubit extends Cubit<ProductState> {
     Category(name: 'Jacket', selected: false),
     Category(name: 'Hoodie', selected: false),
   ];
-  List<Category> get categories => _categories;
 
   Future<void> fetchAllProducts() async {
     emit(ProductLoading());
@@ -34,8 +39,8 @@ class ProductCubit extends Cubit<ProductState> {
     resProduct.fold(
       (left) => emit(ProductError(left.message.toString())),
       (right) {
-        _listProduct = right;
-        emit(ProductLoaded(_listProduct, _categories));
+        listProduct = right;
+        emit(ProductLoaded(listProduct, listCategories));
       },
     );
   }
@@ -43,31 +48,31 @@ class ProductCubit extends Cubit<ProductState> {
   void searchProducts(String value) {
     emit(ProductLoading());
 
-    List<ProductModel> newProducts = _listProduct
+    List<ProductModel> newProducts = listProduct
         .where(
           (element) =>
               element.title.toLowerCase().contains(value.toLowerCase()),
         )
         .toList();
 
-    emit(ProductLoaded(newProducts, _categories));
+    emit(ProductLoaded(newProducts, listCategories));
   }
 
   void filterProducts(Category categories) {
     emit(ProductLoading());
 
-    final newCategories = _categories
+    final newCategories = listCategories
         .map((element) => element.name == categories.name
             ? element.copyWith(selected: true)
             : element.copyWith(selected: false))
         .toList();
 
     if (categories.name.toLowerCase() == 'all') {
-      emit(ProductLoaded(_listProduct, _categories));
+      emit(ProductLoaded(listProduct, listCategories));
       return;
     }
 
-    List<ProductModel> newProducts = _listProduct
+    List<ProductModel> newProducts = listProduct
         .where((element) =>
             element.category.toLowerCase() == categories.name.toLowerCase())
         .toList();

@@ -38,9 +38,8 @@ class _ProductScreenState extends State<ProductScreen> {
           Padding(
             padding: const EdgeInsets.only(right: AppConstant.paddingSmall),
             child: IconButton(
-              onPressed: () => context.read<ProductCubit>().showNotif(),
-              icon: const Icon(Icons.notifications_active_outlined),
-            ),
+                onPressed: () => context.read<ProductCubit>().showNotif(),
+                icon: const Icon(Icons.notifications_active_outlined)),
           ),
         ],
       ),
@@ -83,37 +82,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 child: BlocBuilder<ProductCubit, ProductState>(
                   builder: (context, state) {
                     if (state is ProductLoaded) {
-                      return Row(
-                        children: List.generate(
-                          state.categories.length,
-                          (index) => Container(
-                            margin: const EdgeInsets.only(
-                                right: AppConstant.paddingSmall),
-                            child: InputChip(
-                              onPressed: () => context
-                                  .read<ProductCubit>()
-                                  .filterProducts(state.categories[index]),
-                              label: Text(
-                                  state.categories[index].name.toUpperCase(),
-                                  style: CommonText.fBodySmall.copyWith(
-                                      color: state.categories[index].selected
-                                          ? CommonColor.white
-                                          : CommonColor.textGrey)),
-                              backgroundColor: state.categories[index].selected
-                                  ? CommonColor.primary
-                                  : CommonColor.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    AppConstant.radiusNormal),
-                                side: BorderSide(
-                                    color: state.categories[index].selected
-                                        ? CommonColor.primary
-                                        : CommonColor.borderColorDisable),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
+                      return showCategoryList(state);
                     }
 
                     return Container();
@@ -125,46 +94,7 @@ class _ProductScreenState extends State<ProductScreen> {
               child: BlocBuilder<ProductCubit, ProductState>(
                 builder: (context, state) {
                   if (state is ProductLoaded) {
-                    return ListView.builder(
-                      keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior.onDrag,
-                      padding: const EdgeInsets.only(
-                          left: AppConstant.paddingNormal,
-                          right: AppConstant.paddingNormal,
-                          bottom: AppConstant.paddingNormal),
-                      itemCount:
-                          state.products.length > 1 ? state.products.length : 1,
-                      itemBuilder: (context, index) {
-                        if (state.products.isEmpty) {
-                          return const EmptyWidget(
-                            message: 'No Products Found',
-                            margin: EdgeInsets.zero,
-                          );
-                        }
-
-                        return InkWell(
-                          onTap: () => context.pushNamed(
-                              RoutesName.productsDetail,
-                              extra: state.products[index]),
-                          child: Container(
-                            padding: EdgeInsets.only(
-                                top: AppConstant.paddingNormal,
-                                bottom: index == state.products.length - 1
-                                    ? AppConstant.paddingLarge * 3
-                                    : AppConstant.paddingNormal),
-                            decoration: index == state.products.length - 1
-                                ? null
-                                : const BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: CommonColor
-                                                .borderColorDisable))),
-                            child: SingleProductListWidget(
-                                product: state.products[index]),
-                          ),
-                        );
-                      },
-                    );
+                    return showProductList(state);
                   }
 
                   if (state is ProductError) {
@@ -192,6 +122,79 @@ class _ProductScreenState extends State<ProductScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget showProductList(ProductLoaded state) {
+    return ListView.builder(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      padding: const EdgeInsets.only(
+          left: AppConstant.paddingNormal,
+          right: AppConstant.paddingNormal,
+          bottom: AppConstant.paddingNormal),
+      itemCount: state.products.length > 1 ? state.products.length : 1,
+      itemBuilder: (context, index) {
+        if (state.products.isEmpty) {
+          return const EmptyWidget(
+            message: 'No Products Found',
+            margin: EdgeInsets.zero,
+          );
+        }
+
+        return InkWell(
+          onTap: () => context.pushNamed(RoutesName.productsDetail,
+              extra: state.products[index]),
+          child: Container(
+            padding: EdgeInsets.only(
+                top: AppConstant.paddingNormal,
+                bottom: index == state.products.length - 1
+                    ? AppConstant.paddingLarge * 3
+                    : AppConstant.paddingNormal),
+            decoration: index == state.products.length - 1
+                ? null
+                : const BoxDecoration(
+                    border: Border(
+                        bottom:
+                            BorderSide(color: CommonColor.borderColorDisable))),
+            child: Column(
+              children: [
+                SingleProductListWidget(product: state.products[index]),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget showCategoryList(ProductLoaded state) {
+    return Row(
+      children: List.generate(
+        state.categories.length,
+        (index) => Container(
+          margin: const EdgeInsets.only(right: AppConstant.paddingSmall),
+          child: InputChip(
+            onPressed: () => context
+                .read<ProductCubit>()
+                .filterProducts(state.categories[index]),
+            label: Text(state.categories[index].name.toUpperCase(),
+                style: CommonText.fBodySmall.copyWith(
+                    color: state.categories[index].selected
+                        ? CommonColor.white
+                        : CommonColor.textGrey)),
+            backgroundColor: state.categories[index].selected
+                ? CommonColor.primary
+                : CommonColor.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppConstant.radiusNormal),
+              side: BorderSide(
+                  color: state.categories[index].selected
+                      ? CommonColor.primary
+                      : CommonColor.borderColorDisable),
+            ),
+          ),
         ),
       ),
     );

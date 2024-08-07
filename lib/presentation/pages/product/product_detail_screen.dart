@@ -137,23 +137,23 @@ class ProductDetailScreen extends StatelessWidget {
                   onPressed: () {},
                   text: 'Edit Product',
                 ),
-                // child: CommonButtonOutlined(
-                //   onPressed: state is LoadingAddTocart
-                //       ? () {}
-                //       : () {
-                //           ProductDetailCartModel productCart =
-                //               ProductDetailCartModel(
-                //                   productId: product.id,
-                //                   quantity: 1,
-                //                   product: product);
-
-                //           context.read<ProductDetailCubit>().addCart(CartModel(
-                //               id: "", userId: "", productCart: [productCart]));
-                //         },
-                //   text: 'Add to Cart',
-                //   isLoading: state is LoadingAddTocart,
-                // ),
               ),
+              // CommonButtonOutlined(
+              //   onPressed: state is LoadingAddTocart
+              //       ? () {}
+              //       : () {
+              //           ProductDetailCartModel productCart =
+              //               ProductDetailCartModel(
+              //                   productId: product.id,
+              //                   quantity: 1,
+              //                   product: product);
+
+              //           context.read<ProductDetailCubit>().addCart(CartModel(
+              //               id: "", userId: "", productCart: [productCart]));
+              //         },
+              //   text: 'Add to Cart',
+              //   isLoading: state is LoadingAddTocart,
+              // ),
               const SizedBox(width: AppConstant.paddingSmall),
               Expanded(
                 child: CommonButtonOutlined(

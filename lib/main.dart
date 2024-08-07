@@ -1,3 +1,4 @@
+import 'package:finalproject_flashora/presentation/cubit/product_cubit/crud_product/crud_product_cubit.dart';
 import 'package:finalproject_flashora/presentation/cubit/transaction/history/history_transaction_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => getIt<HistoryTransactionCubit>()),
         BlocProvider(create: (context) => getIt<ProfileCubit>()),
         BlocProvider(create: (context) => getIt<ProductDetailCubit>()),
+        BlocProvider(create: (context) => getIt<CrudProductCubit>()),
         BlocProvider(create: (context) => getIt<CheckoutCubit>()),
       ],
       child: MaterialApp.router(

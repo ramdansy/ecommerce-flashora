@@ -14,6 +14,7 @@ class ProductResponse {
   List<String> image;
   double rating;
   int ratingCount;
+  int stock;
 
   ProductResponse({
     required this.id,
@@ -24,6 +25,7 @@ class ProductResponse {
     required this.image,
     required this.rating,
     required this.ratingCount,
+    required this.stock,
   });
 
   factory ProductResponse.fromMap(Map<String, dynamic> json) => ProductResponse(
@@ -35,6 +37,7 @@ class ProductResponse {
         image: List<String>.from(json["image"].map((x) => x)),
         rating: json["rating"],
         ratingCount: json["ratingCount"],
+        stock: json["stock"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -46,6 +49,7 @@ class ProductResponse {
         "image": List<dynamic>.from(image.map((x) => x)),
         "rating": rating,
         "ratingCount": ratingCount,
+        "stock": stock,
       };
 
   ProductResponse copyWith({
@@ -57,6 +61,7 @@ class ProductResponse {
     List<String>? image,
     double? rating,
     int? ratingCount,
+    int? stock,
   }) {
     return ProductResponse(
       id: id ?? this.id,
@@ -67,6 +72,7 @@ class ProductResponse {
       image: image ?? this.image,
       rating: rating ?? this.rating,
       ratingCount: ratingCount ?? this.ratingCount,
+      stock: stock ?? this.stock,
     );
   }
 }

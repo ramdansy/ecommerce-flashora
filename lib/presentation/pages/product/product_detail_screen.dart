@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/app_constant.dart';
 import '../../../core/common/common_color.dart';
@@ -8,11 +7,8 @@ import '../../../core/common/common_text.dart';
 import '../../../core/common/utils/currency_helper.dart';
 import '../../../core/common/widgets/common_button.dart';
 import '../../../core/common/widgets/common_snacbar.dart';
-import '../../../domain/entities/cart_model.dart';
-import '../../../domain/entities/payment_model.dart';
 import '../../../domain/entities/product_model.dart';
 import '../../cubit/product_cubit/product_detail/product_detail_cubit.dart';
-import '../../routes/app_routes.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final ProductModel product;
@@ -49,6 +45,7 @@ class ProductDetailScreen extends StatelessWidget {
             padding: const EdgeInsets.all(AppConstant.paddingNormal),
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InputChip(
                     label: Text(product.category.toUpperCase(),
@@ -64,6 +61,19 @@ class ProductDetailScreen extends StatelessWidget {
                     ),
                     padding: const EdgeInsets.all(0),
                   ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: 'Stock:',
+                            style: CommonText.fBodyLarge
+                                .copyWith(color: CommonColor.textGrey)),
+                        TextSpan(
+                            text: ' ${product.stock}',
+                            style: CommonText.fHeading5),
+                      ],
+                    ),
+                  )
                 ],
               ),
               const SizedBox(height: AppConstant.paddingSmall),
@@ -124,29 +134,35 @@ class ProductDetailScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: CommonButtonOutlined(
-                  onPressed: state is LoadingAddTocart
-                      ? () {}
-                      : () {
-                          ProductDetailCartModel productCart =
-                              ProductDetailCartModel(
-                                  productId: product.id,
-                                  quantity: 1,
-                                  product: product);
+                  onPressed: () {},
+                  text: 'Edit Product',
+                ),
+                // child: CommonButtonOutlined(
+                //   onPressed: state is LoadingAddTocart
+                //       ? () {}
+                //       : () {
+                //           ProductDetailCartModel productCart =
+                //               ProductDetailCartModel(
+                //                   productId: product.id,
+                //                   quantity: 1,
+                //                   product: product);
 
-                          context.read<ProductDetailCubit>().addCart(CartModel(
-                              id: "", userId: "", productCart: [productCart]));
-                        },
-                  text: 'Add to Cart',
-                  isLoading: state is LoadingAddTocart,
+                //           context.read<ProductDetailCubit>().addCart(CartModel(
+                //               id: "", userId: "", productCart: [productCart]));
+                //         },
+                //   text: 'Add to Cart',
+                //   isLoading: state is LoadingAddTocart,
+                // ),
+              ),
+              const SizedBox(width: AppConstant.paddingSmall),
+              Expanded(
+                child: CommonButtonOutlined(
+                  onPressed: () {},
+                  text: 'Delete Product',
+                  color: CommonColor.errorColor,
+                  fontColor: CommonColor.errorColor,
                 ),
               ),
-              const SizedBox(width: AppConstant.paddingNormal),
-              Expanded(
-                  child: CommonButtonFilled(
-                onPressed: () => context.pushNamed(RoutesName.checkout,
-                    extra: [ProductCheckout(product: product, quantity: 1)]),
-                text: 'Buy Now',
-              )),
             ],
           ),
         );

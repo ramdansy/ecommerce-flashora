@@ -1,3 +1,4 @@
+import 'package:finalproject_flashora/core/common/utils/pdf_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -182,11 +183,11 @@ class _HistoryTransactionDetailState
                 ),
                 const SizedBox(width: AppConstant.paddingNormal),
                 Expanded(
-                  child: CommonButtonFilled(
-                    onPressed: () {},
-                    text: 'Print',
+                  child: CommonButtonOutlined(
+                    onPressed: () => generatePdf(widget.payment),
+                    text: 'Download',
                     iconLeft: const Icon(Icons.print_outlined,
-                        color: CommonColor.white),
+                        color: CommonColor.primary),
                   ),
                 ),
               ],

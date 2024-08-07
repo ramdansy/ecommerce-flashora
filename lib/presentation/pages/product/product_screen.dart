@@ -44,6 +44,14 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        backgroundColor: CommonColor.primary,
+        extendedPadding: const EdgeInsets.all(AppConstant.paddingNormal),
+        icon: const Icon(Icons.add, color: CommonColor.white),
+        label: Text('Add Product',
+            style: CommonText.fBodySmall.copyWith(color: CommonColor.white)),
+      ),
       body: RefreshIndicator(
         onRefresh: () => context.read<ProductCubit>().fetchAllProducts(),
         child: Column(
@@ -117,7 +125,7 @@ class _ProductScreenState extends State<ProductScreen> {
               child: BlocBuilder<ProductCubit, ProductState>(
                 builder: (context, state) {
                   if (state is ProductLoaded) {
-                    return ListView.separated(
+                    return ListView.builder(
                       keyboardDismissBehavior:
                           ScrollViewKeyboardDismissBehavior.onDrag,
                       padding: const EdgeInsets.only(
@@ -138,12 +146,24 @@ class _ProductScreenState extends State<ProductScreen> {
                           onTap: () => context.pushNamed(
                               RoutesName.productsDetail,
                               extra: state.products[index]),
-                          child: SingleProductListWidget(
-                              product: state.products[index]),
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                top: AppConstant.paddingNormal,
+                                bottom: index == state.products.length - 1
+                                    ? AppConstant.paddingLarge * 3
+                                    : AppConstant.paddingNormal),
+                            decoration: index == state.products.length - 1
+                                ? null
+                                : const BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: CommonColor
+                                                .borderColorDisable))),
+                            child: SingleProductListWidget(
+                                product: state.products[index]),
+                          ),
                         );
                       },
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: AppConstant.paddingNormal),
                     );
                   }
 

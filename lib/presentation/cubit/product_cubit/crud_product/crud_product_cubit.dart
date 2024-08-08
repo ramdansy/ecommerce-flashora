@@ -1,15 +1,17 @@
 import 'package:equatable/equatable.dart';
-import 'package:finalproject_flashora/core/common/widgets/common_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/common/widgets/common_snacbar.dart';
 import '../../../../domain/entities/product_model.dart';
 import '../../../../domain/usecases/product/add_product_usecase.dart';
 import '../../../../domain/usecases/product/delete_product_usecase.dart';
 import '../../../../domain/usecases/product/update_price_usecase.dart';
+import '../../../../domain/usecases/product/update_product_usecase.dart';
 import '../../../../domain/usecases/product/update_stock_usecase.dart';
 import '../product/product_cubit.dart';
+import '../product_detail/product_detail_cubit.dart';
 
 part 'crud_product_state.dart';
 
@@ -18,9 +20,10 @@ class CrudProductCubit extends Cubit<CrudProductState> {
   final UpdatePriceUsecase updatePriceUsecase;
   final DeleteProductUsecase deleteCartUsecase;
   final AddProductUsecase addProductUsecase;
+  final UpdateProductUsecase updateProductUsecase;
 
   CrudProductCubit(this.updateStock, this.updatePriceUsecase,
-      this.deleteCartUsecase, this.addProductUsecase)
+      this.deleteCartUsecase, this.addProductUsecase, this.updateProductUsecase)
       : super(CrudProductInitial());
 
   void updateStockProduct(
@@ -91,10 +94,35 @@ class CrudProductCubit extends Cubit<CrudProductState> {
             .toList();
 
         productCubit.emit(ProductLoaded(newList, productCubit.listCategories));
-        CommonSnacbar.showErrorSnackbar(
+        CommonSnacbar.showSuccessSnackbar(
             context: context, message: 'Product deleted successfully');
         context.pop();
         emit(DeletedProduct());
+      },
+    );
+  }
+
+  void updateProduct(BuildContext context, ProductModel product) async {
+    emit(UpdatingProduct());
+
+    final result = await updateProductUsecase.execute(product);
+    result.fold(
+      (left) => emit(UpdateProductError(message: left.message.toString())),
+      (right) {
+        final productDetailCubit = context.read<ProductDetailCubit>();
+        productDetailCubit.getProduct(product.id);
+
+        CommonSnacbar.showSuccessSnackbar(
+            context: context, message: 'Product updated successfully');
+        context.pop();
+
+        final productCubit = context.read<ProductCubit>();
+        final newList = productCubit.listProduct
+            .map((e) => e.id == product.id ? product : e)
+            .toList();
+        productCubit.emit(ProductLoaded(newList, productCubit.listCategories));
+
+        emit(UpdatedProduct());
       },
     );
   }

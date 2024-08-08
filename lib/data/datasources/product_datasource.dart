@@ -10,6 +10,9 @@ abstract class ProductDatasource {
   Future<void> deleteProduct(String productId);
   Future<void> updateStock(String productId, int newStock);
   Future<void> updatePrice(String productId, double newPrice);
+  Future<DocumentSnapshot<Map<String, dynamic>>> getProductbyId(
+      String productId);
+  Future<void> updateProduct(ProductModel product);
 }
 
 class ProductDatasourceImpl implements ProductDatasource {
@@ -45,10 +48,25 @@ class ProductDatasourceImpl implements ProductDatasource {
   }
 
   @override
-  Future<void> updateStock(String productId, int newStock) async {
-    return await _firestore
+  Future<void> updateStock(String productId, int newStock) {
+    return _firestore
         .collection(AppConstant.collectionProducts)
         .doc(productId)
         .update({'stock': newStock});
+  }
+
+  @override
+  Future<DocumentSnapshot<Map<String, dynamic>>> getProductbyId(
+      String productId) {
+    final productRef =
+        _firestore.collection(AppConstant.collectionProducts).doc(productId);
+    return productRef.get();
+  }
+
+  @override
+  Future<void> updateProduct(ProductModel product) {
+    final productRef =
+        _firestore.collection(AppConstant.collectionProducts).doc(product.id);
+    return productRef.update(product.toMap());
   }
 }

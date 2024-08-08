@@ -70,7 +70,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/${RoutesName.addProducts}',
       name: RoutesName.addProducts,
-      builder: (context, state) => const AddProductScreen(),
+      builder: (context, state) {
+        ProductModel? arg = state.extra as ProductModel?;
+        return AddProductScreen(product: arg);
+      },
     ),
     GoRoute(
       path: '/${RoutesName.profile}',

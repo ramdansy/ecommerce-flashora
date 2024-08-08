@@ -25,7 +25,9 @@ import 'domain/usecases/cart/update_quantity_usecase.dart';
 import 'domain/usecases/product/add_product_usecase.dart';
 import 'domain/usecases/product/delete_product_usecase.dart';
 import 'domain/usecases/product/get_all_products_usecase.dart';
+import 'domain/usecases/product/get_product_by_id_usecase.dart';
 import 'domain/usecases/product/update_price_usecase.dart';
+import 'domain/usecases/product/update_product_usecase.dart';
 import 'domain/usecases/product/update_stock_usecase.dart';
 import 'domain/usecases/transaction/create_transaction_usecase.dart';
 import 'domain/usecases/transaction/get_all_transaction_usecase.dart';
@@ -73,17 +75,23 @@ void setupLocator() {
   // Use cases
   getIt.registerLazySingleton(() => LoginUsecase(getIt()));
   getIt.registerLazySingleton(() => RegisterUsecase(getIt()));
+
   getIt.registerLazySingleton(() => GetAllProductsUsecase(getIt()));
   getIt.registerLazySingleton(() => AddProductUsecase(getIt()));
   getIt.registerLazySingleton(() => DeleteProductUsecase(getIt()));
   getIt.registerLazySingleton(() => UpdateStockUsecase(getIt()));
   getIt.registerLazySingleton(() => UpdatePriceUsecase(getIt()));
+  getIt.registerLazySingleton(() => UpdateProductUsecase(getIt()));
+  getIt.registerLazySingleton(() => GetProductByIdUsecase(getIt()));
+
   getIt.registerLazySingleton(() => GetCartByUserIdUsecase(getIt()));
   getIt.registerLazySingleton(() => AddCartUsecase(getIt()));
   getIt.registerLazySingleton(() => UpdateQuantityUsecase(getIt()));
   getIt.registerLazySingleton(() => DeleteCartUsecase(getIt()));
+
   getIt.registerLazySingleton(() => GetUserIdUsecase(getIt()));
   getIt.registerLazySingleton(() => CreateUserUsecase(getIt()));
+
   getIt.registerLazySingleton(() => CreateTransactionUsecase(getIt()));
   getIt.registerLazySingleton(() => GetAllTransactionUsecase(getIt()));
 
@@ -94,9 +102,9 @@ void setupLocator() {
   getIt.registerFactory(() => RegisterCubit(getIt(), getIt()));
   getIt.registerFactory(() => CartCubit(getIt(), getIt(), getIt()));
   getIt.registerFactory(() => ProductCubit(getIt()));
-  getIt.registerFactory(() => ProductDetailCubit(getIt()));
+  getIt.registerFactory(() => ProductDetailCubit(getIt(), getIt()));
   getIt.registerFactory(
-      () => CrudProductCubit(getIt(), getIt(), getIt(), getIt()));
+      () => CrudProductCubit(getIt(), getIt(), getIt(), getIt(), getIt()));
   getIt.registerFactory(() => ProfileCubit(getIt()));
   getIt.registerFactory(() => CheckoutCubit());
   getIt.registerFactory(() => PaymentCubit(getIt()));

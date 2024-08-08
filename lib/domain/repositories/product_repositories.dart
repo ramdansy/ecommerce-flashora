@@ -12,4 +12,6 @@ abstract class ProductRepositories {
       String productId, int newStock);
   Future<Either<CommonError, String>> updatePrice(
       String productId, double newPrice);
+  Future<Either<CommonError, ProductModel>> getProductbyId(String productId);
+  Future<Either<CommonError, String>> updateProduct(ProductModel product);
 }

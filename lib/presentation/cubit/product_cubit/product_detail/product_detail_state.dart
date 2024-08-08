@@ -9,6 +9,13 @@ sealed class ProductDetailState extends Equatable {
 
 final class ProductDetailInitial extends ProductDetailState {}
 
+final class ProductDetailLoading extends ProductDetailState {}
+
+final class ProductDetailLoaded extends ProductDetailState {
+  final ProductModel product;
+  const ProductDetailLoaded(this.product);
+}
+
 final class LoadingAddTocart extends ProductDetailState {}
 
 final class ProductDetailError extends ProductDetailState {

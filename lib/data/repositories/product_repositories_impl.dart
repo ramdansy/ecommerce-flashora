@@ -79,4 +79,31 @@ class ProductRepositoriesImpl implements ProductRepositories {
       return Left(CommonError(message: 'Failed to update stock: $e'));
     }
   }
+
+  @override
+  Future<Either<CommonError, ProductModel>> getProductbyId(
+      String productId) async {
+    try {
+      final response = await dataSource.getProductbyId(productId);
+      if (response.exists) {
+        return Right(
+            ProductModel.fromMap(response.data()!).copyWith(id: response.id));
+      } else {
+        return Left(CommonError(message: 'Failed to get product data'));
+      }
+    } catch (e) {
+      return Left(CommonError(message: 'Failed to get product: $e'));
+    }
+  }
+
+  @override
+  Future<Either<CommonError, String>> updateProduct(
+      ProductModel product) async {
+    try {
+      await dataSource.updateProduct(product);
+      return const Right('Success updated product');
+    } catch (e) {
+      return Left(CommonError(message: 'Failed to update product: $e'));
+    }
+  }
 }

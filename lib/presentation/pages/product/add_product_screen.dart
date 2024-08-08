@@ -6,12 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../core/app_constant.dart';
 import '../../../core/common/common_color.dart';
 import '../../../core/common/common_text.dart';
 import '../../../core/common/enum/common_form_validate_type.dart';
+import '../../../core/common/utils/currency_helper.dart';
 import '../../../core/common/widgets/common_button.dart';
 import '../../../core/common/widgets/common_snacbar.dart';
 import '../../../core/common/widgets/common_text_input.dart';
@@ -19,7 +22,8 @@ import '../../../domain/entities/product_model.dart';
 import '../../cubit/product_cubit/crud_product/crud_product_cubit.dart';
 
 class AddProductScreen extends StatefulWidget {
-  const AddProductScreen({super.key});
+  final ProductModel? product;
+  const AddProductScreen({super.key, this.product});
 
   @override
   State<AddProductScreen> createState() => _AddProductScreenState();
@@ -53,13 +57,34 @@ class _AddProductScreenState extends State<AddProductScreen> {
   bool isLoading = false;
 
   @override
+  void initState() {
+    if (widget.product != null) {
+      nameController.text = widget.product!.title;
+      descriptionController.text = widget.product!.description;
+      priceController.text = CurrencyHelper.thousandFormatCurrency(
+          widget.product!.price.toStringAsFixed(0));
+      stockController.text = widget.product!.stock.toString();
+      selectedCategory = widget.product!.category;
+      initProductImage();
+    }
+    super.initState();
+  }
+
+  void initProductImage() async {
+    final convertImage = await urlToImageFile(
+        widget.product!.image.first, widget.product!.title);
+    setState(() => productImage = convertImage);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CommonColor.white,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: CommonColor.white,
-        title: Text('Add Product', style: CommonText.fHeading4),
+        title: Text('${widget.product == null ? 'Add' : 'Edit'} Product',
+            style: CommonText.fHeading4),
         scrolledUnderElevation: 0.0,
       ),
       body: BlocConsumer<CrudProductCubit, CrudProductState>(
@@ -92,7 +117,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             focusNode: nameFocusNode,
             label: 'Product Name',
             hintText: 'Input Product Name',
-            textInputAction: TextInputAction.next,
+            textInputAction: TextInputAction.done,
             obsecureText: false,
             maxLines: 1,
             onFieldSubmit: (value) {},
@@ -105,7 +130,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             focusNode: descriptionFocusNode,
             label: 'Product Description',
             hintText: 'Input Product Description',
-            textInputAction: TextInputAction.next,
+            textInputAction: TextInputAction.done,
             obsecureText: false,
             onFieldSubmit: (value) {},
             textInputType: TextInputType.text,
@@ -179,7 +204,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppConstant.paddingNormal),
                 child: Text('Rp.', style: CommonText.fHeading5)),
-            textInputAction: TextInputAction.next,
+            textInputAction: TextInputAction.done,
             onFieldSubmit: (_) {},
             textInputType: TextInputType.number,
             textStyle: CommonText.fHeading5,
@@ -195,7 +220,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             textEditingController: stockController,
             focusNode: stockFocusNode,
             label: 'Stock',
-            hintText: '0',
+            hintText: 'Stock',
             textInputAction: TextInputAction.done,
             obsecureText: false,
             maxLines: 1,
@@ -269,11 +294,29 @@ class _AddProductScreenState extends State<AddProductScreen> {
               if (formKey.currentState!.validate() &&
                   productImage != null &&
                   selectedCategory != null) {
-                String imageUrl =
-                    await uploadImage(productImage!, nameController.text);
+                if (widget.product == null) {
+                  String imageUrl =
+                      await uploadImage(productImage!, nameController.text);
 
-                final product = ProductModel(
-                    id: "",
+                  final product = ProductModel(
+                      id: "",
+                      title: nameController.text,
+                      description: descriptionController.text,
+                      category: selectedCategory!,
+                      price: double.parse(
+                          priceController.text.replaceAll('.', '')),
+                      stock: int.parse(stockController.text),
+                      image: [imageUrl],
+                      rating: -1,
+                      ratingCount: -1);
+
+                  context.read<CrudProductCubit>().addProduct(context, product);
+                } else {
+                  final item = widget.product!;
+                  String imageUrl =
+                      await uploadImage(productImage!, nameController.text);
+                  final product = ProductModel(
+                    id: item.id,
                     title: nameController.text,
                     description: descriptionController.text,
                     category: selectedCategory!,
@@ -281,10 +324,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         double.parse(priceController.text.replaceAll('.', '')),
                     stock: int.parse(stockController.text),
                     image: [imageUrl],
-                    rating: -1,
-                    ratingCount: -1);
+                    rating: item.rating,
+                    ratingCount: item.ratingCount,
+                  );
 
-                context.read<CrudProductCubit>().addProduct(context, product);
+                  context
+                      .read<CrudProductCubit>()
+                      .updateProduct(context, product);
+                }
               }
             },
           )
@@ -316,5 +363,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
     setState(() => isLoading = !isLoading);
     return downloadUrl;
+  }
+
+  Future<File> urlToImageFile(String url, String productName) async {
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load image');
+      }
+      final bytes = response.bodyBytes;
+
+      final directory = await getApplicationDocumentsDirectory();
+      final fileName = '$productName.jpg';
+      final file = File('${directory.path}/$fileName');
+
+      await file.writeAsBytes(bytes);
+
+      return file;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

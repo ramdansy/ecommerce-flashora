@@ -48,7 +48,7 @@ class ProductModel {
   }
 
   Map<String, dynamic> toMap() => {
-        "id": id,
+        // "id": id,
         "title": title,
         "price": price,
         "description": description,
@@ -60,7 +60,7 @@ class ProductModel {
       };
 
   factory ProductModel.fromMap(Map<String, dynamic> map) => ProductModel(
-        id: map['id'],
+        id: map['id'] ?? '',
         title: map['title'],
         price: map['price'],
         description: map['description'],

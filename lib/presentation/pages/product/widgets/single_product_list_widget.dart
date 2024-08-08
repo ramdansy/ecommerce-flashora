@@ -13,6 +13,7 @@ import '../../../../core/common/widgets/common_snacbar.dart';
 import '../../../../core/common/widgets/common_text_input.dart';
 import '../../../../domain/entities/product_model.dart';
 import '../../../cubit/product_cubit/crud_product/crud_product_cubit.dart';
+import 'alert_product_widget.dart';
 
 class SingleProductListWidget extends StatefulWidget {
   final ProductModel product;
@@ -141,30 +142,17 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
             )
           ],
         ),
-        if (widget.product.stock <= 10) ...[
+        if (widget.product.stock <= 10 && widget.product.stock > 0) ...[
           const SizedBox(height: AppConstant.paddingSmall),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppConstant.paddingNormal,
-                vertical: AppConstant.paddingSmall),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppConstant.radiusNormal),
-              color: CommonColor.warningColor.withOpacity(.1),
-              border: Border.all(color: CommonColor.warningColor),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.warning_amber_rounded,
-                    color: CommonColor.warningColor),
-                const SizedBox(width: AppConstant.paddingMedium),
-                Text('Your stock is running low. Update it soon!',
-                    style: CommonText.fBodySmall.copyWith(
-                        color: CommonColor.warningColor,
-                        fontWeight: FontWeight.w500)),
-              ],
-            ),
-          )
+          const AlertProductWidget(
+              text: 'Your stock is running low. Update it soon!',
+              status: Status.warning)
+        ],
+        if (widget.product.stock < 1) ...[
+          const SizedBox(height: AppConstant.paddingSmall),
+          const AlertProductWidget(
+              text: 'Your stock is empty. Update it soon!',
+              status: Status.danger)
         ],
         const SizedBox(height: AppConstant.paddingSmall),
         Row(
@@ -185,20 +173,20 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
             const SizedBox(width: AppConstant.paddingSmall),
             Expanded(
               child: CommonButtonOutlined(
-                  onPressed: () {
-                    priceController.text =
-                        CurrencyHelper.thousandFormatCurrency(
-                            widget.product.price.toStringAsFixed(0));
-                    setState(() {
-                      showUpdatePriceCont = !showUpdatePriceCont;
-                      showUpdateStockCont = false;
-                    });
-                  },
-                  text: 'Update Price',
-                  paddingVertical: 0,
-                  color: CommonColor.primary),
+                onPressed: () {
+                  priceController.text = CurrencyHelper.thousandFormatCurrency(
+                      widget.product.price.toStringAsFixed(0));
+                  setState(() {
+                    showUpdatePriceCont = !showUpdatePriceCont;
+                    showUpdateStockCont = false;
+                  });
+                },
+                text: 'Update Price',
+                paddingVertical: 0,
+                color: CommonColor.primary,
+              ),
             ),
-            const SizedBox(width: AppConstant.paddingSmall),
+            const SizedBox(width: AppConstant.paddingExtraSmall),
             BlocConsumer<CrudProductCubit, CrudProductState>(
               listener: (context, state) {
                 if (state is DeleteProductError) {

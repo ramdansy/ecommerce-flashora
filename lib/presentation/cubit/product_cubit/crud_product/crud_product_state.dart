@@ -25,6 +25,15 @@ final class DeletingProduct extends CrudProductState {}
 
 final class DeletedProduct extends CrudProductState {}
 
+final class UpdatingProduct extends CrudProductState {}
+
+final class UpdatedProduct extends CrudProductState {}
+
+final class UpdateProductError extends CrudProductState {
+  final String message;
+  const UpdateProductError({required this.message});
+}
+
 final class AddProductError extends CrudProductState {
   final String message;
   const AddProductError({required this.message});

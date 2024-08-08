@@ -107,7 +107,7 @@ class _HistoryTransactionDetailState
                     child: AspectRatio(
                       aspectRatio: 1 / 1.25,
                       child: Image.network(item.product.image.first,
-                          fit: BoxFit.contain),
+                          fit: BoxFit.cover),
                     ),
                   ),
                   const SizedBox(width: AppConstant.paddingSmall),

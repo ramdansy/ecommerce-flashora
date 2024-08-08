@@ -6,6 +6,7 @@ import '../pages/auth/login_screen.dart';
 import '../pages/auth/register_screen.dart';
 import '../pages/cart/cart_screen.dart';
 import '../pages/main_home.dart';
+import '../pages/product/add_product_screen.dart';
 import '../pages/product/product_detail_screen.dart';
 import '../pages/product/product_screen.dart';
 import '../pages/profile/profile_screen.dart';
@@ -21,6 +22,7 @@ abstract class RoutesName {
   static const register = 'register';
   static const home = 'home';
   static const products = 'products';
+  static const addProducts = 'add-products';
   static const productsDetail = 'products-detail';
   static const cart = 'cart';
   static const profile = 'profile';
@@ -65,6 +67,11 @@ final GoRouter router = GoRouter(
                 return ProductDetailScreen(product: arg);
               }),
         ]),
+    GoRoute(
+      path: '/${RoutesName.addProducts}',
+      name: RoutesName.addProducts,
+      builder: (context, state) => const AddProductScreen(),
+    ),
     GoRoute(
       path: '/${RoutesName.profile}',
       name: RoutesName.profile,

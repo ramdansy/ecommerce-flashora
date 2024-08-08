@@ -93,7 +93,7 @@ class ProductDetailScreen extends StatelessWidget {
                           color: CommonColor.warningColor),
                       const SizedBox(width: AppConstant.paddingExtraSmall),
                       Text(
-                        '${product.rating} (${product.ratingCount})',
+                        '${product.rating < 1 ? 0 : product.rating} (${product.ratingCount < 1 ? 0 : product.ratingCount})',
                         style: CommonText.fBodySmall
                             .copyWith(color: CommonColor.textGrey),
                       ),

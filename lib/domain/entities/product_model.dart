@@ -68,7 +68,7 @@ class ProductModel {
         image: List<String>.from(map['image']),
         rating: map['rating'],
         ratingCount: map['ratingCount'],
-        stock: map['stock'],
+        stock: map['stock'] ?? 0,
       );
 }
 

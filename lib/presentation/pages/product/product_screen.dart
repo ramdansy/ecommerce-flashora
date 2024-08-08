@@ -44,7 +44,9 @@ class _ProductScreenState extends State<ProductScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        heroTag: null,
+        onPressed: () => context.pushNamed(RoutesName.addProducts,
+            extra: context.read<ProductCubit>().listCategories),
         backgroundColor: CommonColor.primary,
         extendedPadding: const EdgeInsets.all(AppConstant.paddingNormal),
         icon: const Icon(Icons.add, color: CommonColor.white),

@@ -38,7 +38,8 @@ class ProductRepositoriesImpl implements ProductRepositories {
       DocumentSnapshot<Map<String, dynamic>> result = await response.get();
 
       if (result.exists) {
-        return Right(ProductModel.fromMap(result.data()!));
+        return Right(
+            ProductModel.fromMap(result.data()!).copyWith(id: result.id));
       } else {
         return Left(CommonError(message: 'Failed to create product data'));
       }

@@ -59,16 +59,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     style: CommonText.fHeading2)
                                 : null,
                           ),
-                          Align(
-                              alignment: Alignment.centerRight,
-                              child: CommonButtonOutlined(
-                                  onPressed: () => context
-                                      .read<ProfileCubit>()
-                                      .changeProfileImage(),
-                                  text: 'Edit Photo')),
+                          Positioned(
+                            bottom: -AppConstant.paddingLarge,
+                            child: CommonButtonIcon(
+                              onPressed: () => context
+                                  .read<ProfileCubit>()
+                                  .changeProfileImage(),
+                              backgroundColor: CommonColor.primary,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(999)),
+                              icon: const Icon(
+                                Icons.camera_alt_rounded,
+                                color: CommonColor.white,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                      const SizedBox(height: AppConstant.paddingNormal),
+                      const SizedBox(height: AppConstant.paddingExtraLarge),
                       Text(state.user.name.toUpperCase(),
                           style: CommonText.fHeading4,
                           maxLines: 3,

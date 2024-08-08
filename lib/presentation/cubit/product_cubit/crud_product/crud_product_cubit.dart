@@ -1,8 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:finalproject_flashora/core/common/widgets/common_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../../domain/usecases/cart/delete_cart_usecase.dart';
+import '../../../../domain/entities/product_model.dart';
+import '../../../../domain/usecases/product/add_product_usecase.dart';
+import '../../../../domain/usecases/product/delete_product_usecase.dart';
 import '../../../../domain/usecases/product/update_price_usecase.dart';
 import '../../../../domain/usecases/product/update_stock_usecase.dart';
 import '../product/product_cubit.dart';
@@ -12,10 +16,11 @@ part 'crud_product_state.dart';
 class CrudProductCubit extends Cubit<CrudProductState> {
   final UpdateStockUsecase updateStock;
   final UpdatePriceUsecase updatePriceUsecase;
-  final DeleteCartUsecase deleteCartUsecase;
+  final DeleteProductUsecase deleteCartUsecase;
+  final AddProductUsecase addProductUsecase;
 
-  CrudProductCubit(
-      this.updateStock, this.updatePriceUsecase, this.deleteCartUsecase)
+  CrudProductCubit(this.updateStock, this.updatePriceUsecase,
+      this.deleteCartUsecase, this.addProductUsecase)
       : super(CrudProductInitial());
 
   void updateStockProduct(
@@ -54,6 +59,42 @@ class CrudProductCubit extends Cubit<CrudProductState> {
         productCubit.emit(ProductLoaded(
             productCubit.listProduct, productCubit.listCategories));
         emit(UpdatedPrice());
+      },
+    );
+  }
+
+  void addProduct(BuildContext context, ProductModel product) async {
+    emit(AddingProduct());
+
+    final result = await addProductUsecase.execute(product);
+    result.fold(
+      (left) => emit(AddProductError(message: left.message.toString())),
+      (right) {
+        final productCubit = context.read<ProductCubit>();
+        productCubit.fetchAllProducts();
+      },
+    );
+
+    emit(AddedProduct());
+  }
+
+  void deleteProduct(BuildContext context, String productId) async {
+    emit(DeletingProduct());
+
+    final result = await deleteCartUsecase.execute(productId);
+    result.fold(
+      (left) => emit(DeleteProductError(message: left.message.toString())),
+      (right) {
+        final productCubit = context.read<ProductCubit>();
+        final newList = productCubit.listProduct
+            .where((element) => element.id != productId)
+            .toList();
+
+        productCubit.emit(ProductLoaded(newList, productCubit.listCategories));
+        CommonSnacbar.showErrorSnackbar(
+            context: context, message: 'Product deleted successfully');
+        context.pop();
+        emit(DeletedProduct());
       },
     );
   }

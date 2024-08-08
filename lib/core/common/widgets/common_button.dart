@@ -92,7 +92,9 @@ class CommonButtonOutlined extends StatelessWidget {
       this.borderRadius,
       this.padding,
       this.isLoading = false,
-      this.iconLeft});
+      this.iconLeft,
+      this.iconRight,
+      this.textAlign = TextAlign.center});
 
   final VoidCallback onPressed;
   final String? text;
@@ -108,50 +110,44 @@ class CommonButtonOutlined extends StatelessWidget {
   final EdgeInsets? padding;
   final bool isLoading;
   final Widget? iconLeft;
+  final Widget? iconRight;
+  final TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: isEnable ? onPressed : null,
-      style: OutlinedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius:
-                borderRadius ?? BorderRadius.circular(AppConstant.radiusNormal),
-          ),
-          side: BorderSide(color: isEnable ? color : CommonColor.disabled),
-          padding: padding ??
-              EdgeInsets.symmetric(
-                  vertical: paddingVertical, horizontal: paddingHorizontal)),
-      child: isLoading
-          ? const SizedBox(
-              width: AppConstant.iconNormal,
-              height: AppConstant.iconNormal,
-              child: CircularProgressIndicator(color: CommonColor.primary),
-            )
-          : iconLeft != null
-              ? Row(
-                  children: [
-                    Container(child: iconLeft),
-                    Expanded(
-                      child: Text(
-                        text ?? "",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: fontColor,
-                            fontWeight: fontWeight,
-                            fontSize: fontSize),
-                      ),
+        onPressed: isEnable ? onPressed : null,
+        style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: borderRadius ??
+                  BorderRadius.circular(AppConstant.radiusNormal),
+            ),
+            side: BorderSide(color: isEnable ? color : CommonColor.disabled),
+            padding: padding ??
+                EdgeInsets.symmetric(
+                    vertical: paddingVertical, horizontal: paddingHorizontal)),
+        child: isLoading
+            ? const SizedBox(
+                width: AppConstant.iconNormal,
+                height: AppConstant.iconNormal,
+                child: CircularProgressIndicator(color: CommonColor.primary),
+              )
+            : Row(
+                children: [
+                  if (iconLeft != null) Container(child: iconLeft),
+                  Expanded(
+                    child: Text(
+                      text ?? "",
+                      textAlign: textAlign,
+                      style: TextStyle(
+                          color: fontColor,
+                          fontWeight: fontWeight,
+                          fontSize: fontSize),
                     ),
-                  ],
-                )
-              : Text(
-                  text ?? "",
-                  style: TextStyle(
-                      color: fontColor,
-                      fontWeight: fontWeight,
-                      fontSize: fontSize),
-                ),
-    );
+                  ),
+                  if (iconRight != null) Container(child: iconRight),
+                ],
+              ));
   }
 }
 

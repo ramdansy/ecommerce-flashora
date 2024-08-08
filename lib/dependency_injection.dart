@@ -95,7 +95,8 @@ void setupLocator() {
   getIt.registerFactory(() => CartCubit(getIt(), getIt(), getIt()));
   getIt.registerFactory(() => ProductCubit(getIt()));
   getIt.registerFactory(() => ProductDetailCubit(getIt()));
-  getIt.registerFactory(() => CrudProductCubit(getIt(), getIt(), getIt()));
+  getIt.registerFactory(
+      () => CrudProductCubit(getIt(), getIt(), getIt(), getIt()));
   getIt.registerFactory(() => ProfileCubit(getIt()));
   getIt.registerFactory(() => CheckoutCubit());
   getIt.registerFactory(() => PaymentCubit(getIt()));

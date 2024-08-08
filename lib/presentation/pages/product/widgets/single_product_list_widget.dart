@@ -58,7 +58,7 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
               child: AspectRatio(
                 aspectRatio: 1 / 1.25,
                 child: Image.network(widget.product.image.first,
-                    fit: BoxFit.contain),
+                    fit: BoxFit.cover),
               ),
             ),
             const SizedBox(width: 12),
@@ -80,20 +80,21 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.star_rounded,
-                                  color: CommonColor.warningColor),
-                              const SizedBox(
-                                  width: AppConstant.paddingExtraSmall),
-                              Text(
-                                '${widget.product.rating} (${widget.product.ratingCount})',
-                                style: CommonText.fBodySmall
-                                    .copyWith(color: CommonColor.textGrey),
-                              ),
-                            ],
-                          ),
-                          Text('  |  ${widget.product.category.toUpperCase()}',
+                          if (widget.product.rating > 0)
+                            Row(
+                              children: [
+                                const Icon(Icons.star_rounded,
+                                    color: CommonColor.warningColor),
+                                const SizedBox(
+                                    width: AppConstant.paddingExtraSmall),
+                                Text(
+                                  '${widget.product.rating} (${widget.product.ratingCount})  |  ',
+                                  style: CommonText.fBodySmall
+                                      .copyWith(color: CommonColor.textGrey),
+                                ),
+                              ],
+                            ),
+                          Text(widget.product.category.toUpperCase(),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: CommonText.fBodySmall
@@ -198,10 +199,51 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
                   color: CommonColor.primary),
             ),
             const SizedBox(width: AppConstant.paddingSmall),
-            CommonButtonIcon(
-              onPressed: () {},
-              icon: const Icon(Icons.delete, color: CommonColor.errorColor),
-              borderColor: CommonColor.errorColor,
+            BlocConsumer<CrudProductCubit, CrudProductState>(
+              listener: (context, state) {
+                if (state is DeleteProductError) {
+                  CommonSnacbar.showErrorSnackbar(
+                      context: context, message: state.message);
+                }
+              },
+              builder: (context, state) {
+                return CommonButtonIcon(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        backgroundColor: CommonColor.white,
+                        title:
+                            Text('Delete Product', style: CommonText.fHeading5),
+                        content: Text(
+                            'Are you sure want to delete this product?Product which already deleted can not be recovered.',
+                            style: CommonText.fBodyLarge),
+                        actions: [
+                          Row(children: [
+                            Expanded(
+                                child: CommonButtonOutlined(
+                                    onPressed: () => Navigator.pop(context),
+                                    text: 'No, Cancel')),
+                            const SizedBox(width: AppConstant.paddingSmall),
+                            Expanded(
+                                child: CommonButtonFilled(
+                              onPressed: () {
+                                context
+                                    .read<CrudProductCubit>()
+                                    .deleteProduct(context, widget.product.id);
+                              },
+                              text: 'Yes, Delete',
+                              isLoading: state is DeletingProduct,
+                            )),
+                          ])
+                        ],
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.delete, color: CommonColor.errorColor),
+                  borderColor: CommonColor.errorColor,
+                );
+              },
             ),
           ],
         ),
@@ -266,8 +308,13 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
                       onFieldSubmit: (value) {},
                       textInputType: TextInputType.number,
                       prefixIcon: IconButton(
-                          onPressed: () => stockController.text =
-                              (int.parse(stockController.text) - 1).toString(),
+                          onPressed: () {
+                            if (int.parse(stockController.text) > 0) {
+                              stockController.text =
+                                  (int.parse(stockController.text) - 1)
+                                      .toString();
+                            }
+                          },
                           icon: const Icon(Icons.remove)),
                       suffixIcon: IconButton(
                           onPressed: () => stockController.text =

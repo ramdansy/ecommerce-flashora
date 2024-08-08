@@ -1,5 +1,3 @@
-import 'package:finalproject_flashora/presentation/cubit/product_cubit/crud_product/crud_product_cubit.dart';
-import 'package:finalproject_flashora/presentation/cubit/transaction/history/history_transaction_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,11 +8,13 @@ import 'dependency_injection.dart';
 import 'firebase_options.dart';
 import 'presentation/cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'presentation/cubit/cart/cart_cubit.dart';
+import 'presentation/cubit/product_cubit/crud_product/crud_product_cubit.dart';
 import 'presentation/cubit/product_cubit/product/product_cubit.dart';
 import 'presentation/cubit/product_cubit/product_detail/product_detail_cubit.dart';
 import 'presentation/cubit/profile/profile_cubit.dart';
 import 'presentation/cubit/splashscreen/splash_screen_cubit.dart';
 import 'presentation/cubit/transaction/checkout/checkout_cubit.dart';
+import 'presentation/cubit/transaction/history/history_transaction_cubit.dart';
 import 'presentation/routes/app_routes.dart';
 
 void main() async {

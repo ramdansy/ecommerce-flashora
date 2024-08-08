@@ -1,4 +1,3 @@
-import 'package:finalproject_flashora/core/common/utils/pdf_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -7,6 +6,7 @@ import '../../../../core/common/common_color.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/common/enum/common_status_transaction.dart';
 import '../../../../core/common/utils/currency_helper.dart';
+import '../../../../core/common/utils/pdf_generator.dart';
 import '../../../../core/common/widgets/common_button.dart';
 import '../../../../core/common/widgets/common_line.dart';
 import '../../../../domain/entities/payment_model.dart';

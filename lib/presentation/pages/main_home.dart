@@ -1,15 +1,15 @@
-import 'package:finalproject_flashora/core/common/common_text.dart';
-import 'package:finalproject_flashora/presentation/pages/transaction/history_transaction/history_transaction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/app_constant.dart';
 import '../../core/common/common_color.dart';
 import '../../core/common/common_icon.dart';
+import '../../core/common/common_text.dart';
 import '../cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'cart/cart_screen.dart';
 import 'product/product_screen.dart';
 import 'profile/profile_screen.dart';
+import 'transaction/history_transaction/history_transaction_screen.dart';
 
 class MainHome extends StatelessWidget {
   const MainHome({super.key});

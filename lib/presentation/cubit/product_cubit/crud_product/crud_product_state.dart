@@ -13,7 +13,16 @@ final class UpdatingStock extends CrudProductState {}
 
 final class UpdatedStock extends CrudProductState {}
 
+final class UpdatingPrice extends CrudProductState {}
+
+final class UpdatedPrice extends CrudProductState {}
+
 final class UpdateStockError extends CrudProductState {
   final String message;
   const UpdateStockError({required this.message});
+}
+
+final class UpdatePriceError extends CrudProductState {
+  final String message;
+  const UpdatePriceError({required this.message});
 }

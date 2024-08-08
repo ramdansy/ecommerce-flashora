@@ -16,6 +16,10 @@ class CurrencyHelper {
     return value.replaceAll('.', '').replaceAll('Rp', '');
   }
 
+  static String reformatCurrencyToString(String value) {
+    return value.toString().replaceAll('.', '').replaceAll(',', '');
+  }
+
   static String thousandFormatCurrency(String value) {
     var replaceStr = value.contains(",")
         ? value.replaceAll(",", "")

@@ -1,7 +1,7 @@
-import '../../../../core/common/widgets/common_snacbar.dart';
-import '../../../cubit/product_cubit/crud_product/crud_product_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 import '../../../../core/app_constant.dart';
 import '../../../../core/common/common_color.dart';
@@ -9,8 +9,10 @@ import '../../../../core/common/common_text.dart';
 import '../../../../core/common/enum/common_form_validate_type.dart';
 import '../../../../core/common/utils/currency_helper.dart';
 import '../../../../core/common/widgets/common_button.dart';
+import '../../../../core/common/widgets/common_snacbar.dart';
 import '../../../../core/common/widgets/common_text_input.dart';
 import '../../../../domain/entities/product_model.dart';
+import '../../../cubit/product_cubit/crud_product/crud_product_cubit.dart';
 
 class SingleProductListWidget extends StatefulWidget {
   final ProductModel product;
@@ -24,7 +26,9 @@ class SingleProductListWidget extends StatefulWidget {
 
 class _SingleProductListWidgetState extends State<SingleProductListWidget> {
   final stockController = TextEditingController();
+  final priceController = TextEditingController();
   final stockFocus = FocusNode();
+  final priceFocus = FocusNode();
 
   bool showUpdateStockCont = false;
   bool showUpdatePriceCont = false;
@@ -32,6 +36,8 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
   @override
   void initState() {
     stockController.text = widget.product.stock.toString();
+    priceController.text = CurrencyHelper.thousandFormatCurrency(
+        widget.product.price.toStringAsFixed(0));
     super.initState();
   }
 
@@ -165,17 +171,11 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
             Expanded(
               child: CommonButtonOutlined(
                   onPressed: () {
+                    stockController.text = widget.product.stock.toString();
                     setState(() {
                       showUpdateStockCont = !showUpdateStockCont;
                       showUpdatePriceCont = false;
                     });
-                    // showModalBottomSheet(
-                    //   context: context,
-                    //   isScrollControlled: true,
-                    //   builder: (BuildContext context) {
-                    //     return BottomSheetEditStock(product: product);
-                    //   },
-                    // );
                   },
                   text: 'Update Stock',
                   paddingVertical: 0,
@@ -185,12 +185,15 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
             Expanded(
               child: CommonButtonOutlined(
                   onPressed: () {
+                    priceController.text =
+                        CurrencyHelper.thousandFormatCurrency(
+                            widget.product.price.toStringAsFixed(0));
                     setState(() {
                       showUpdatePriceCont = !showUpdatePriceCont;
                       showUpdateStockCont = false;
                     });
                   },
-                  text: 'Edit Price',
+                  text: 'Update Price',
                   paddingVertical: 0,
                   color: CommonColor.primary),
             ),
@@ -205,9 +208,9 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
         if (showUpdateStockCont) ...[
           updateStockContainer(widget.product),
         ],
-        // if (showUpdatePriceCont) ...[
-        //   updatePriceContainer(widget.product),
-        // ],
+        if (showUpdatePriceCont) ...[
+          updatePriceContainer(widget.product),
+        ],
       ],
     );
   }
@@ -219,6 +222,11 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
           CommonSnacbar.showSuccessSnackbar(
               context: context, message: 'Stock Updated');
           setState(() => showUpdateStockCont = !showUpdateStockCont);
+        }
+
+        if (state is UpdateStockError) {
+          CommonSnacbar.showErrorSnackbar(
+              context: context, message: state.message);
         }
       },
       builder: (context, state) {
@@ -280,6 +288,91 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
                     text: 'Update',
                     paddingVertical: AppConstant.paddingNormal,
                     isLoading: state is UpdatingStock,
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget updatePriceContainer(ProductModel product) {
+    return BlocConsumer<CrudProductCubit, CrudProductState>(
+      listener: (context, state) {
+        if (state is UpdatedPrice) {
+          CommonSnacbar.showSuccessSnackbar(
+              context: context, message: 'Price Updated');
+          setState(() => showUpdatePriceCont = !showUpdatePriceCont);
+        }
+
+        if (state is UpdatePriceError) {
+          CommonSnacbar.showErrorSnackbar(
+              context: context, message: state.message);
+        }
+      },
+      builder: (context, state) {
+        return Container(
+          margin: const EdgeInsets.only(top: AppConstant.paddingSmall),
+          padding: const EdgeInsets.all(AppConstant.paddingMedium),
+          decoration: BoxDecoration(
+              color: CommonColor.primary.withOpacity(.1),
+              borderRadius: BorderRadius.circular(AppConstant.radiusLarge)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Update Price',
+                      style: CommonText.fBodyLarge
+                          .copyWith(fontWeight: FontWeight.bold)),
+                  InkWell(
+                      onTap: () => setState(
+                          () => showUpdatePriceCont = !showUpdatePriceCont),
+                      child:
+                          const Icon(Icons.close, color: CommonColor.primary)),
+                ],
+              ),
+              const SizedBox(height: AppConstant.paddingMedium),
+              Row(
+                children: [
+                  Expanded(
+                    child: CommonTextInput(
+                      textEditingController: priceController,
+                      focusNode: priceFocus,
+                      hintText: '0',
+                      textAlign: TextAlign.end,
+                      maxLines: 1,
+                      prefix: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppConstant.paddingNormal),
+                          child: Text('Rp.', style: CommonText.fHeading5)),
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmit: (_) {},
+                      textInputType: TextInputType.number,
+                      textStyle: CommonText.fHeading5,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        CurrencyInputFormatter(
+                            thousandSeparator: ThousandSeparator.Period,
+                            mantissaLength: 0)
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: AppConstant.paddingSmall),
+                  CommonButtonFilled(
+                    onPressed: () {
+                      context.read<CrudProductCubit>().updatePriceProduct(
+                          context,
+                          widget.product.id,
+                          double.parse(CurrencyHelper.reformatCurrencyToString(
+                              priceController.text)));
+                    },
+                    text: 'Update',
+                    paddingVertical: AppConstant.paddingNormal,
+                    isLoading: state is UpdatingPrice,
                   ),
                 ],
               )

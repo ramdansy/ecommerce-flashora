@@ -1,10 +1,11 @@
-import 'package:finalproject_flashora/domain/usecases/cart/delete_cart_usecase.dart';
-import 'package:finalproject_flashora/domain/usecases/product/update_price_usecase.dart';
-import 'package:finalproject_flashora/domain/usecases/product/update_stock_usecase.dart';
-import 'package:finalproject_flashora/presentation/cubit/product_cubit/product/product_cubit.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
+
+import '../../../../domain/usecases/cart/delete_cart_usecase.dart';
+import '../../../../domain/usecases/product/update_price_usecase.dart';
+import '../../../../domain/usecases/product/update_stock_usecase.dart';
+import '../product/product_cubit.dart';
 
 part 'crud_product_state.dart';
 
@@ -33,6 +34,26 @@ class CrudProductCubit extends Cubit<CrudProductState> {
         productCubit.emit(ProductLoaded(
             productCubit.listProduct, productCubit.listCategories));
         emit(UpdatedStock());
+      },
+    );
+  }
+
+  void updatePriceProduct(
+      BuildContext context, String productId, double newPrice) async {
+    final productCubit = context.read<ProductCubit>();
+    emit(UpdatingPrice());
+
+    final result = await updatePriceUsecase.execute(productId, newPrice);
+    result.fold(
+      (left) => emit(UpdatePriceError(message: left.message.toString())),
+      (right) {
+        final selectedProductIndex = productCubit.listProduct
+            .indexWhere((element) => element.id == productId);
+        productCubit.listProduct[selectedProductIndex].price = newPrice;
+
+        productCubit.emit(ProductLoaded(
+            productCubit.listProduct, productCubit.listCategories));
+        emit(UpdatedPrice());
       },
     );
   }

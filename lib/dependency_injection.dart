@@ -37,6 +37,7 @@ import 'presentation/cubit/auth/login/login_cubit.dart';
 import 'presentation/cubit/auth/register/register_cubit.dart';
 import 'presentation/cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'presentation/cubit/cart/cart_cubit.dart';
+import 'presentation/cubit/cashier/cashier_cubit.dart';
 import 'presentation/cubit/product_cubit/crud_product/crud_product_cubit.dart';
 import 'presentation/cubit/product_cubit/product/product_cubit.dart';
 import 'presentation/cubit/product_cubit/product_detail/product_detail_cubit.dart';
@@ -102,7 +103,9 @@ void setupLocator() {
   getIt.registerFactory(() => RegisterCubit(getIt(), getIt()));
   getIt.registerFactory(() => CartCubit(getIt(), getIt(), getIt()));
   getIt.registerFactory(() => ProductCubit(getIt()));
-  getIt.registerFactory(() => ProductDetailCubit(getIt(), getIt()));
+  getIt.registerFactory(() => ProductDetailCubit(getIt()));
+  getIt.registerFactory(
+      () => CashierCubit(getIt(), getIt(), getIt(), getIt(), getIt()));
   getIt.registerFactory(
       () => CrudProductCubit(getIt(), getIt(), getIt(), getIt(), getIt()));
   getIt.registerFactory(() => ProfileCubit(getIt()));

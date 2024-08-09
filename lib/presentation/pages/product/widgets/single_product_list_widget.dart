@@ -145,8 +145,7 @@ class _SingleProductListWidgetState extends State<SingleProductListWidget> {
         if (widget.product.stock <= 10 && widget.product.stock > 0) ...[
           const SizedBox(height: AppConstant.paddingSmall),
           const AlertProductWidget(
-              text: 'Your stock is running low. Update it soon!',
-              status: Status.warning)
+              text: 'Your stock is running low', status: Status.warning)
         ],
         if (widget.product.stock < 1) ...[
           const SizedBox(height: AppConstant.paddingSmall),

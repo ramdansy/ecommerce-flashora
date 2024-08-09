@@ -1,5 +1,5 @@
-import 'package:finalproject_flashora/presentation/cubit/product_cubit/crud_product/crud_product_cubit.dart';
-import 'package:finalproject_flashora/presentation/pages/product/widgets/alert_product_widget.dart';
+import '../../cubit/product_cubit/crud_product/crud_product_cubit.dart';
+import 'widgets/alert_product_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -86,7 +86,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   if (widget.product.stock <= 10 &&
                       widget.product.stock > 0) ...[
                     const AlertProductWidget(
-                        text: 'Your stock is running low. Update it soon!',
+                        text: 'Your stock is running low',
                         status: Status.warning),
                     const SizedBox(height: AppConstant.paddingSmall),
                   ],
@@ -196,22 +196,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   fontColor: CommonColor.errorColor,
                 ),
               ),
-              // CommonButtonOutlined(
-              //   onPressed: state is LoadingAddTocart
-              //       ? () {}
-              //       : () {
-              //           ProductDetailCartModel productCart =
-              //               ProductDetailCartModel(
-              //                   productId: product.id,
-              //                   quantity: 1,
-              //                   product: product);
-
-              //           context.read<ProductDetailCubit>().addCart(CartModel(
-              //               id: "", userId: "", productCart: [productCart]));
-              //         },
-              //   text: 'Add to Cart',
-              //   isLoading: state is LoadingAddTocart,
-              // ),
             ],
           ),
         )

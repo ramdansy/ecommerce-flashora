@@ -53,3 +53,12 @@ final class DeleteProductError extends CrudProductState {
   final String message;
   const DeleteProductError({required this.message});
 }
+
+final class CrudLoading extends CrudProductState {}
+
+final class CrudSuccess extends CrudProductState {}
+
+final class CrudError extends CrudProductState {
+  final String message;
+  const CrudError({required this.message});
+}

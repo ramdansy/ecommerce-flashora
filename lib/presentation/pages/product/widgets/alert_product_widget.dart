@@ -45,7 +45,7 @@ class AlertProductWidget extends StatelessWidget {
                   color: status == Status.warning
                       ? CommonColor.warningColor
                       : CommonColor.errorColor,
-                  fontWeight: FontWeight.w500)),
+                  fontWeight: FontWeight.w600)),
         ],
       ),
     );

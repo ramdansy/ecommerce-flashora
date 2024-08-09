@@ -50,10 +50,11 @@ class SingleCartListWidget extends StatelessWidget {
                     style: CommonText.fBodyLarge
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  Text(product.product!.category,
+                  Text(
+                      '${product.product!.category}  |  Stock: ${product.product!.stock}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: CommonText.fBodySmall
+                      style: CommonText.fBodyLarge
                           .copyWith(color: CommonColor.textGrey)),
                 ],
               ),
@@ -124,9 +125,12 @@ class SingleCartListWidget extends StatelessWidget {
                             const SizedBox(width: 8),
                             InkWell(
                                 onTap: () {
-                                  context
-                                      .read<CartCubit>()
-                                      .incrementQuantity(product.productId);
+                                  if (product.quantity <
+                                      product.product!.stock) {
+                                    context
+                                        .read<CartCubit>()
+                                        .incrementQuantity(product.productId);
+                                  }
                                 },
                                 child: CommonIcon.plus),
                           ],

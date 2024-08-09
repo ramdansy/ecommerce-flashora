@@ -86,6 +86,12 @@ class _CartScreenState extends State<CartScreen> {
           ),
           Container(
             padding: const EdgeInsets.all(AppConstant.paddingNormal),
+            decoration: const BoxDecoration(
+              color: CommonColor.whiteBG,
+              border: Border(
+                  top: BorderSide(
+                      color: CommonColor.borderColorDisable, width: 1.0)),
+            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

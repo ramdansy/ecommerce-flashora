@@ -10,6 +10,7 @@ import '../../../core/common/widgets/common_text_input.dart';
 import '../../cubit/product_cubit/product/product_cubit.dart';
 import '../../routes/app_routes.dart';
 import '../../widgets/empty_widget.dart';
+import 'widgets/category_list_widget.dart';
 import 'widgets/single_product_list_widget.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -83,7 +84,9 @@ class _ProductScreenState extends State<ProductScreen> {
                 child: BlocBuilder<ProductCubit, ProductState>(
                   builder: (context, state) {
                     if (state is ProductLoaded) {
-                      return showCategoryList(state);
+                      return CategoryListWidget(
+                        listCategories: state.categories,
+                      );
                     }
 
                     return Container();
@@ -167,37 +170,6 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
         );
       },
-    );
-  }
-
-  Widget showCategoryList(ProductLoaded state) {
-    return Row(
-      children: List.generate(
-        state.categories.length,
-        (index) => Container(
-          margin: const EdgeInsets.only(right: AppConstant.paddingSmall),
-          child: InputChip(
-            onPressed: () => context
-                .read<ProductCubit>()
-                .filterProducts(state.categories[index]),
-            label: Text(state.categories[index].name.toUpperCase(),
-                style: CommonText.fBodySmall.copyWith(
-                    color: state.categories[index].selected
-                        ? CommonColor.white
-                        : CommonColor.textGrey)),
-            backgroundColor: state.categories[index].selected
-                ? CommonColor.primary
-                : CommonColor.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppConstant.radiusNormal),
-              side: BorderSide(
-                  color: state.categories[index].selected
-                      ? CommonColor.primary
-                      : CommonColor.borderColorDisable),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

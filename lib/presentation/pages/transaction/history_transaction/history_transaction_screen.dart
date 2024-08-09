@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/app_constant.dart';
 import '../../../../core/common/common_color.dart';
@@ -160,11 +159,18 @@ class SingleHistoryTransactionWidget extends StatelessWidget {
                             style: CommonText.fBodySmall
                                 .copyWith(color: CommonColor.textGrey)),
                         const SizedBox(height: AppConstant.paddingSmall),
-                        Text(
-                          CurrencyHelper.formatCurrencyDouble(
-                              item.listProducts.first.product.price),
-                          style: CommonText.fHeading5
-                              .copyWith(color: CommonColor.primary),
+                        RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: '${item.listProducts.first.quantity} x ',
+                                style: CommonText.fBodyLarge),
+                            TextSpan(
+                              text: CurrencyHelper.formatCurrencyDouble(
+                                  item.listProducts.first.product.price),
+                              style: CommonText.fHeading5
+                                  .copyWith(color: CommonColor.primary),
+                            ),
+                          ]),
                         ),
                       ],
                     ),
@@ -182,7 +188,9 @@ class SingleHistoryTransactionWidget extends StatelessWidget {
                 ),
               ),
             Container(
-              padding: const EdgeInsets.all(AppConstant.paddingMedium),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppConstant.paddingMedium,
+                  vertical: AppConstant.paddingSmall),
               decoration: const BoxDecoration(
                 border: Border(
                     top: BorderSide(color: CommonColor.borderColorDisable)),
@@ -190,12 +198,19 @@ class SingleHistoryTransactionWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                      "${item.transactionId} - ${DateFormat.yMMMd().format(item.createdAt!)}",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: CommonText.fBodySmall
-                          .copyWith(color: CommonColor.textGrey)),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Total Payment',
+                          style: CommonText.fBodySmall
+                              .copyWith(color: CommonColor.textGrey),
+                        ),
+                        Text(
+                            CurrencyHelper.formatCurrencyDouble(
+                                item.totalPrice),
+                            style: CommonText.fHeading5),
+                      ]),
                   ItemStatusTransactionWidget(status: item.status!),
                 ],
               ),

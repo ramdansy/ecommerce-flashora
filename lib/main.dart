@@ -8,6 +8,7 @@ import 'dependency_injection.dart';
 import 'firebase_options.dart';
 import 'presentation/cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'presentation/cubit/cart/cart_cubit.dart';
+import 'presentation/cubit/cashier/cashier_cubit.dart';
 import 'presentation/cubit/product_cubit/crud_product/crud_product_cubit.dart';
 import 'presentation/cubit/product_cubit/product/product_cubit.dart';
 import 'presentation/cubit/product_cubit/product_detail/product_detail_cubit.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => getIt<ProductDetailCubit>()),
         BlocProvider(create: (context) => getIt<CrudProductCubit>()),
         BlocProvider(create: (context) => getIt<CheckoutCubit>()),
+        BlocProvider(create: (context) => getIt<CashierCubit>()),
       ],
       child: MaterialApp.router(
         title: 'Flashora',

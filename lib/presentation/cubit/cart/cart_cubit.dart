@@ -15,8 +15,7 @@ class CartCubit extends Cubit<CartState> {
   final GetCartByUserIdUsecase getCartByUserId;
   final UpdateQuantityUsecase updateQuantity;
   final DeleteCartUsecase deleteCart;
-  CartCubit(this.getCartByUserId, this.updateQuantity,
-      this.deleteCart)
+  CartCubit(this.getCartByUserId, this.updateQuantity, this.deleteCart)
       : super(CartInitial());
 
   CartModel? _cart;
@@ -30,9 +29,6 @@ class CartCubit extends Cubit<CartState> {
       (left) => emit(CartError(left.message.toString())),
       (right) {
         if (right.productCart.isNotEmpty) {
-          // right.totalPrice = right.productCart
-          //     .map((e) => e.product!.price * e.quantity)
-          //     .reduce((a, b) => a + b);
           _cart = right;
           emit(CartLoaded(_cart!));
         } else {

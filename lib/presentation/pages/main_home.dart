@@ -1,3 +1,4 @@
+import 'cashier/cashier_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,10 +24,12 @@ class MainHome extends StatelessWidget {
             case 0:
               return const ProductScreen();
             case 1:
-              return const CartScreen();
+              return const CashierScreen();
             case 2:
-              return const HistoryTransactionScreen();
+              return const CartScreen();
             case 3:
+              return const HistoryTransactionScreen();
+            case 4:
               return const ProfileScreen();
             default:
               return const ProductScreen();
@@ -61,6 +64,11 @@ class MainHome extends StatelessWidget {
               icon: CommonIcon.productDefault,
               activeIcon: CommonIcon.productActive,
               label: 'Products',
+            ),
+            BottomNavigationBarItem(
+              icon: CommonIcon.cashierDefault,
+              activeIcon: CommonIcon.cashierActive,
+              label: 'Cashier',
             ),
             BottomNavigationBarItem(
               icon: CommonIcon.cartDefault,

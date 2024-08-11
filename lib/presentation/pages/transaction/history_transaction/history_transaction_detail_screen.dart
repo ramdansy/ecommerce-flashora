@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../../core/app_constant.dart';
@@ -83,6 +84,10 @@ class _HistoryTransactionDetailState
           SingleLabelValueWidget(
               title: 'Transaction ID',
               value: widget.payment.transactionId ?? ''),
+          SingleLabelValueWidget(
+              title: 'Transaction Date',
+              value:
+                  DateFormat('d MMM yyyy').format(widget.payment.createdAt!)),
           const SizedBox(height: AppConstant.paddingNormal),
           const Line(),
           const SizedBox(height: AppConstant.paddingNormal),

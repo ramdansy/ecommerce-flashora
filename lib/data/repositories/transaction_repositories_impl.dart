@@ -53,4 +53,32 @@ class TransactionRepositoriesImpl implements TransactionRepositories {
       return Left(CommonError(message: 'Unknown error: $e'));
     }
   }
+
+  @override
+  Future<Either<CommonError, List<PaymentModel>>> filterTransaction(
+      {required DateTime? startDate,
+      required DateTime? endDate,
+      double? minPrice,
+      double? maxPrice,
+      String? category,
+      String? status}) async {
+    try {
+      final response = await dataSource.filterTransaction(
+          startDate: startDate,
+          endDate: endDate,
+          minPrice: minPrice,
+          maxPrice: maxPrice,
+          category: category,
+          status: status);
+      if (response.docs.isNotEmpty) {
+        final jsonResponse =
+            response.docs.map((e) => PaymentModel.fromMap(e.data())).toList();
+        return Right(List<PaymentModel>.from(jsonResponse));
+      } else {
+        return const Right([]);
+      }
+    } catch (e) {
+      return Left(CommonError(message: 'Unknown error: $e'));
+    }
+  }
 }

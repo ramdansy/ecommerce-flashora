@@ -54,11 +54,11 @@ final class DeleteProductError extends CrudProductState {
   const DeleteProductError({required this.message});
 }
 
-final class CrudLoading extends CrudProductState {}
+final class CrudCashierLoading extends CrudProductState {}
 
-final class CrudSuccess extends CrudProductState {}
+final class CrudCashierSuccess extends CrudProductState {}
 
-final class CrudError extends CrudProductState {
+final class CrudCashierError extends CrudProductState {
   final String message;
-  const CrudError({required this.message});
+  const CrudCashierError({required this.message});
 }

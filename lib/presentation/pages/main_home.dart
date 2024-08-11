@@ -1,4 +1,3 @@
-import 'cashier/cashier_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,9 +7,11 @@ import '../../core/common/common_icon.dart';
 import '../../core/common/common_text.dart';
 import '../cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'cart/cart_screen.dart';
+import 'cashier/cashier_screen.dart';
 import 'product/product_screen.dart';
 import 'profile/profile_screen.dart';
 import 'transaction/history_transaction/history_transaction_screen.dart';
+import 'transaction/history_transaction/widgets/end_drawer_history_transaction_widget.dart';
 
 class MainHome extends StatelessWidget {
   const MainHome({super.key});
@@ -36,6 +37,7 @@ class MainHome extends StatelessWidget {
           }
         },
       ),
+      endDrawer: const EndDrawerHistoryTransactionWidget(),
       bottomNavigationBar: Container(
         padding:
             const EdgeInsets.symmetric(vertical: AppConstant.paddingExtraSmall),

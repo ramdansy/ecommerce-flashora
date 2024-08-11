@@ -7,4 +7,11 @@ abstract class TransactionRepositories {
   Future<Either<CommonError, PaymentModel>> createTransaction(
       PaymentModel payment);
   Future<Either<CommonError, List<PaymentModel>>> getAllTransaction();
+  Future<Either<CommonError, List<PaymentModel>>> filterTransaction(
+      {required DateTime? startDate,
+      required DateTime? endDate,
+      double? minPrice,
+      double? maxPrice,
+      String? category,
+      String? status});
 }

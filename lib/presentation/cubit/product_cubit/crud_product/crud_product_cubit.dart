@@ -18,13 +18,17 @@ part 'crud_product_state.dart';
 class CrudProductCubit extends Cubit<CrudProductState> {
   final UpdateStockUsecase updateStock;
   final UpdatePriceUsecase updatePriceUsecase;
-  final DeleteProductUsecase deleteCartUsecase;
+  final DeleteProductUsecase deleteProductUsecase;
   final AddProductUsecase addProductUsecase;
   final UpdateProductUsecase updateProductUsecase;
 
-  CrudProductCubit(this.updateStock, this.updatePriceUsecase,
-      this.deleteCartUsecase, this.addProductUsecase, this.updateProductUsecase)
-      : super(CrudProductInitial());
+  CrudProductCubit(
+    this.updateStock,
+    this.updatePriceUsecase,
+    this.deleteProductUsecase,
+    this.addProductUsecase,
+    this.updateProductUsecase,
+  ) : super(CrudProductInitial());
 
   void updateStockProduct(
       BuildContext context, String productId, int newStock) async {
@@ -84,7 +88,7 @@ class CrudProductCubit extends Cubit<CrudProductState> {
   void deleteProduct(BuildContext context, String productId) async {
     emit(DeletingProduct());
 
-    final result = await deleteCartUsecase.execute(productId);
+    final result = await deleteProductUsecase.execute(productId);
     result.fold(
       (left) => emit(DeleteProductError(message: left.message.toString())),
       (right) {

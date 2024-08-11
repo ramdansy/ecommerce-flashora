@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/app_preferences.dart';
@@ -28,6 +27,7 @@ class CashierCubit extends Cubit<CashierState> {
   List<ProductModel> listProduct = [];
   List<ProductModel> listFilterProduct = [];
   CartModel? _cart;
+  CartModel? get cart => _cart;
 
   List<Category> _listCategories = [];
   List<Category> listDefaultCategories = [
@@ -85,7 +85,7 @@ class CashierCubit extends Cubit<CashierState> {
     emit(CashierLoaded(listFilterProduct, newCategories, _cart));
   }
 
-  void addProductToCart(BuildContext context, CartModel cart) async {
+  void addProductToCart(CartModel cart) async {
     emit(UpdatingCashier());
 
     cart.userId = (await AppPreferences.getUserId())!;

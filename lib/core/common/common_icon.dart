@@ -42,6 +42,8 @@ class CommonIcon {
   static SvgPicture delete = getImageFromAsset("delete.svg");
   static SvgPicture minus = getImageFromAsset("minus.svg");
   static SvgPicture plus = getImageFromAsset("plus.svg");
+  static SvgPicture filter =
+      getImageFromAsset("filter.svg", width: 24, height: 24);
 
   //profile menu icon
   static SvgPicture address = getImageFromAsset("address.svg");

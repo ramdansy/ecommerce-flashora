@@ -1,4 +1,3 @@
-import 'package:finalproject_flashora/presentation/pages/cashier/widgets/product_cashier_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,6 +10,7 @@ import '../../cubit/bottom_nav/bottom_nav_cubit.dart';
 import '../../cubit/cashier/cashier_cubit.dart';
 import '../../widgets/empty_widget.dart';
 import '../product/widgets/category_list_widget.dart';
+import 'widgets/product_cashier_placeholder.dart';
 import 'widgets/single_product_cashier_widget.dart';
 
 class CashierScreen extends StatefulWidget {

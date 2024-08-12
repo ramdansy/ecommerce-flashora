@@ -91,42 +91,46 @@ class _HistoryTransactionScreenState extends State<HistoryTransactionScreen> {
             ),
           ),
           Expanded(
-            child:
-                BlocBuilder<HistoryTransactionCubit, HistoryTransactionState>(
-              builder: (context, state) {
-                if (state is HistoryLoaded) {
-                  return ListView.builder(
-                    padding: const EdgeInsets.all(AppConstant.paddingNormal),
-                    itemCount: state.historyTransaction.isNotEmpty
-                        ? state.historyTransaction.length
-                        : 1,
-                    itemBuilder: (context, index) {
-                      if (state.historyTransaction.isEmpty) {
-                        return const EmptyWidget(
-                          message: 'No Transaction Found',
-                          margin: EdgeInsets.zero,
-                        );
-                      }
+            child: RefreshIndicator(
+              onRefresh: () =>
+                  context.read<HistoryTransactionCubit>().onRefresh(),
+              child:
+                  BlocBuilder<HistoryTransactionCubit, HistoryTransactionState>(
+                builder: (context, state) {
+                  if (state is HistoryLoaded) {
+                    return ListView.builder(
+                      padding: const EdgeInsets.all(AppConstant.paddingNormal),
+                      itemCount: state.historyTransaction.isNotEmpty
+                          ? state.historyTransaction.length
+                          : 1,
+                      itemBuilder: (context, index) {
+                        if (state.historyTransaction.isEmpty) {
+                          return const EmptyWidget(
+                            message: 'No Transaction Found',
+                            margin: EdgeInsets.zero,
+                          );
+                        }
 
-                      final item = state.historyTransaction[index];
-                      return SingleHistoryTransactionWidget(item: item);
-                    },
-                  );
-                }
-
-                return ListView.separated(
-                  itemCount: 10,
-                  padding: const EdgeInsets.all(AppConstant.paddingNormal),
-                  itemBuilder: (context, index) {
-                    return CommonShimmer(
-                      width: MediaQuery.of(context).size.width,
-                      height: 100,
+                        final item = state.historyTransaction[index];
+                        return SingleHistoryTransactionWidget(item: item);
+                      },
                     );
-                  },
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: AppConstant.paddingSmall),
-                );
-              },
+                  }
+
+                  return ListView.separated(
+                    itemCount: 10,
+                    padding: const EdgeInsets.all(AppConstant.paddingNormal),
+                    itemBuilder: (context, index) {
+                      return CommonShimmer(
+                        width: MediaQuery.of(context).size.width,
+                        height: 100,
+                      );
+                    },
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: AppConstant.paddingSmall),
+                  );
+                },
+              ),
             ),
           ),
         ],

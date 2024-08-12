@@ -102,10 +102,9 @@ class _HistoryTransactionDetailState
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(AppConstant.radiusLarge),
-                      color: CommonColor.whiteBG,
-                    ),
+                        borderRadius:
+                            BorderRadius.circular(AppConstant.radiusLarge),
+                        color: CommonColor.whiteBG),
                     clipBehavior: Clip.hardEdge,
                     constraints:
                         const BoxConstraints(maxHeight: 100, maxWidth: 80),

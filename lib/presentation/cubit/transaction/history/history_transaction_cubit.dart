@@ -16,7 +16,7 @@ class HistoryTransactionCubit extends Cubit<HistoryTransactionState> {
   List<PaymentModel> _listPayment = [];
   final searchController = TextEditingController();
 
-  void getHistoryTransaction() async {
+  Future<void> getHistoryTransaction() async {
     emit(HistoryLoading());
 
     _listPayment.clear();
@@ -31,25 +31,9 @@ class HistoryTransactionCubit extends Cubit<HistoryTransactionState> {
     );
   }
 
-  void filterList(int index) {
-    emit(HistoryLoading());
-
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (index == 0) {
-        emit(HistoryLoaded(_listPayment));
-        return;
-      }
-
-      final status = index == 1
-          ? CommonStatusTransaction.success
-          : index == 2
-              ? CommonStatusTransaction.pending
-              : CommonStatusTransaction.failed;
-
-      final filtered =
-          _listPayment.where((element) => element.status == status).toList();
-      emit(HistoryLoaded(filtered));
-    });
+  Future<void> onRefresh() {
+    searchController.clear;
+    return getHistoryTransaction();
   }
 
   void searchProducts(String value) {

@@ -40,6 +40,7 @@ class ProductCubit extends Cubit<ProductState> {
       (left) => emit(ProductError(left.message.toString())),
       (right) {
         listProduct = right;
+        listProduct.sort((a, b) => a.title.compareTo(b.title));
         emit(ProductLoaded(listProduct, listCategories));
       },
     );

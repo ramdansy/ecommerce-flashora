@@ -8,6 +8,7 @@ import 'package:lottie/lottie.dart';
 
 import '../../../../core/common/common_color.dart';
 import '../../../../core/common/common_text.dart';
+import '../../../../core/common/enum/common_status_transaction.dart';
 import '../../../../core/common/utils/currency_helper.dart';
 import '../../../../core/common/utils/notification_helper.dart';
 import '../../../../domain/entities/payment_model.dart';
@@ -115,6 +116,8 @@ class PaymentCubit extends Cubit<PaymentState> {
       paymentMethod: newSelectedPaymentMethod,
       transactionId:
           "ORD${DateFormat('ddMMyyyy').format(DateTime.now())}${Random().nextInt(1000)}",
+      createdAt: DateTime.now(),
+      status: CommonStatusTransaction.success,
     );
 
     final resCreateTransaction =
@@ -145,7 +148,7 @@ class PaymentCubit extends Cubit<PaymentState> {
                       router.pop();
                       router.pop();
                       router.pop();
-                      context.read<BottomNavCubit>().navigateTo(index: 2);
+                      context.read<BottomNavCubit>().navigateTo(index: 3);
                       router.pushNamed(RoutesName.historyTransactionDetail,
                           extra: paymentModel);
                     })),

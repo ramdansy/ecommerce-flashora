@@ -175,26 +175,11 @@ class _HistoryTransactionDetailState
           const Line(),
           const SizedBox(height: AppConstant.paddingNormal),
           if (widget.payment.status == CommonStatusTransaction.success) ...[
-            Row(
-              children: [
-                Expanded(
-                  child: CommonButtonOutlined(
-                    onPressed: () {},
-                    text: 'Share',
-                    iconLeft: const Icon(Icons.share_outlined,
-                        color: CommonColor.primary),
-                  ),
-                ),
-                const SizedBox(width: AppConstant.paddingNormal),
-                Expanded(
-                  child: CommonButtonOutlined(
-                    onPressed: () => generatePdf(widget.payment),
-                    text: 'Download',
-                    iconLeft: const Icon(Icons.print_outlined,
-                        color: CommonColor.primary),
-                  ),
-                ),
-              ],
+            CommonButtonOutlined(
+              onPressed: () => generatePdf(widget.payment),
+              text: 'Download Invoice',
+              iconLeft:
+                  const Icon(Icons.print_outlined, color: CommonColor.primary),
             ),
             const SizedBox(height: AppConstant.paddingNormal),
           ],

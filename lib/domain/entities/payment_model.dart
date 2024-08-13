@@ -51,7 +51,7 @@ class PaymentModel {
       'paymentMethod': paymentMethod,
       'transactionId': transactionId,
       'createdAt': createdAt ?? DateTime.now(),
-      'status': status ?? 'failed',
+      'status': 'success',
     };
   }
 

@@ -32,7 +32,7 @@ class CartRepositoriesImpl implements CartRepositories {
     try {
       final cart = await getCartByUserId(userId);
 
-      if (cart.right.userId == userId) {
+      if (cart.right.id.isNotEmpty) {
         if (cart.right.productCart.isNotEmpty) {
           final existingProduct = cart.right.productCart
               .where((element) =>

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../dependency_injection.dart';
 
 import '../../../core/app_constant.dart';
 import '../../../core/common/common_color.dart';
@@ -10,7 +9,9 @@ import '../../../core/common/enum/common_form_validate_type.dart';
 import '../../../core/common/widgets/common_button.dart';
 import '../../../core/common/widgets/common_snacbar.dart';
 import '../../../core/common/widgets/common_text_input.dart';
+import '../../../dependency_injection.dart';
 import '../../cubit/auth/login/login_cubit.dart';
+import '../../cubit/bottom_nav/bottom_nav_cubit.dart';
 import '../../routes/app_routes.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -57,6 +58,7 @@ class LoginScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is LoginSuccess) {
           context.goNamed(RoutesName.home);
+          context.read<BottomNavCubit>().navigateTo(index: 0);
         }
 
         if (state is LoginFailed) {

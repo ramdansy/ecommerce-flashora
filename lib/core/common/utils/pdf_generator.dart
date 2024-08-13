@@ -31,7 +31,6 @@ Future<void> generatePdf(PaymentModel item) async {
                 style:
                     const pw.TextStyle(fontSize: 10, color: PdfColors.green)),
             pw.SizedBox(height: AppConstant.paddingNormal),
-
             pw.Text('DITERBITKAN UNTUK',
                 style:
                     pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold)),
@@ -86,7 +85,6 @@ Future<void> generatePdf(PaymentModel item) async {
               ],
             ),
             pw.SizedBox(height: AppConstant.paddingNormal),
-
             pw.Table(
               columnWidths: {
                 0: const pw.FixedColumnWidth(6),
@@ -163,7 +161,6 @@ Future<void> generatePdf(PaymentModel item) async {
                   ),
               ],
             ),
-
             pw.SizedBox(height: AppConstant.paddingNormal),
             pw.Table(
               columnWidths: {
@@ -179,7 +176,7 @@ Future<void> generatePdf(PaymentModel item) async {
                     pw.Padding(
                       padding: const pw.EdgeInsets.symmetric(vertical: 8),
                       child: pw.Text(
-                          'TOTAL HARGA (${item.listProducts.length})',
+                          'TOTAL HARGA \n(${item.listProducts.length} Products)',
                           style: pw.TextStyle(
                               fontSize: 10, fontWeight: pw.FontWeight.bold),
                           textAlign: pw.TextAlign.center),
@@ -196,11 +193,6 @@ Future<void> generatePdf(PaymentModel item) async {
                 ),
               ],
             ),
-            // pw.Container(
-            //   alignment: pw.Alignment.center,
-            //   child: pw.Text('Thank you for shopping with us',
-            //       style: pw.TextStyle()),
-            // ),
           ],
         );
       },
@@ -220,7 +212,7 @@ Future<void> generatePdf(PaymentModel item) async {
 
   Uint8List bytes = await doc.save();
   String dir = directory.path;
-  final file = File('$dir/mydocument.pdf');
+  final file = File('$dir/INVOICE-${item.transactionId}.pdf');
   await file.writeAsBytes(bytes);
   await OpenFile.open(file.path);
 }

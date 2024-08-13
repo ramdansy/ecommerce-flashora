@@ -97,7 +97,7 @@ class RegisterScreen extends StatelessWidget {
                 focusNode: registerCubit.addressFocus,
                 hintText: 'Address',
                 textInputAction: TextInputAction.done,
-                maxLines: 1,
+                maxLines: 3,
                 onFieldSubmit: (value) {},
                 textInputType: TextInputType.text,
                 validators: const [CommonFormValidateType.noEmpty],

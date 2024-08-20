@@ -9,6 +9,4 @@ Flashora is a POS (Point of Sale) application designed for cashiers and manageme
 - Profile
 
 ## Overview
-[![Watch the video]
-https://youtu.be/IoAvn8VBbqE]
 https://youtu.be/IoAvn8VBbqE

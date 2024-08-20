@@ -1,16 +1,12 @@
-# finalproject_flashora
+# Ecommerce Flashora
+Flashora is a POS (Point of Sale) application designed for cashiers and management to manage products and purchases. It allows users to manage products (CRUD), create carts and transactions, update profiles, and more.
 
-A new Flutter project.
+## Fitur
+- Authentication
+- CRUD Product
+- Cart
+- Transaction
+- Profile
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Overview
+https://youtu.be/IoAvn8VBbqE
